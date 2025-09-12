@@ -1,7 +1,7 @@
 
 
 import React, { useState, useEffect } from "react";
-import Profile from "../assets/profile.png";
+import Profile from "../assets/Profile.png";
 import { Mail, Github, Linkedin, Twitter } from "lucide-react";
 
 const Portfolio = () => {
@@ -66,7 +66,7 @@ const Portfolio = () => {
       id: 3,
       title: "Fund hive",
       description:
-        "Decentralized Crowdfunding Platform in which you anyone can create campaing for fund raising and anyone can donate",
+        "Decentralized Crowdfunding Platform in which you anyone can create campaign for fund raising and anyone can donate",
       tech: ["Solidity", "react", "truffle", "sepolia test network network"],
       link: "https://lnkd.in/dHHiQn63",
     },
@@ -133,6 +133,12 @@ const Portfolio = () => {
 
     return () => clearTimeout(timeout);
   }, [typewriterText, typewriterIndex, isDeleting, currentTextIndex]);
+  const handleMenuClick = (sectionId) => {
+    setMobileMenuOpen(false);
+    if (sectionId) {
+      document.getElementById(sectionId).scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <div style={styles.body}>
@@ -145,6 +151,9 @@ const Portfolio = () => {
             .hero h1 { font-size: 2.5rem !important; }
             .hero p { font-size: 0.9rem !important; }
             .navbar { padding: 1rem !important; }
+            .logo { font-size: 1.4rem !important; }
+            .nav-links { display: none !important; }
+            .mobile-menu-button { display: block !important; }
             .social-sidebar { display: none !important; }
             .section { padding: 3rem 2rem !important; }
             .services-grid { grid-template-columns: 1fr !important; }
@@ -154,6 +163,41 @@ const Portfolio = () => {
           @media (max-width: 480px) {
             .hero h1 { font-size: 2rem !important; }
             .section { padding: 2rem 1rem !important; }
+            .logo { font-size: 1.2rem !important; }
+            .navbar { padding: 0.8rem !important; }
+          }
+          
+          .mobile-menu {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 9;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+            border-bottom: 1px solid rgba(255, 26, 26, 0.3);
+          }
+          
+          .mobile-menu.open {
+            transform: translateX(0);
+          }
+          
+          .mobile-menu-button {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: color 0.3s ease;
+          }
+          
+          .mobile-menu-button:hover {
+            color: #ff1a1a;
           }
         `}
       </style>
@@ -196,9 +240,9 @@ const Portfolio = () => {
 
         {/* Navbar */}
         <nav style={styles.navbar} className="navbar">
-          <h1 style={styles.logo}>
+          <a href="/"><h1 style={styles.logo}>
             Ether<span style={styles.logoSpan}>Braider</span>
-          </h1>
+          </h1></a>
           <ul style={styles.navLinks}>
             <li>
               <a href="#services" style={styles.navLink}>
