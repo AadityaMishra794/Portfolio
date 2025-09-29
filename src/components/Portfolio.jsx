@@ -1,10 +1,130 @@
+import React, { useState, useEffect, useRef } from "react";
+import { Mail, Github, Linkedin, Twitter, Zap, Lock, Shield, ArrowRight } from "lucide-react";
+import ProfileImage from "../assets/Profile.png";
+import AboutImage from "../assets/About.png";
+// Profile image placeholder - replace with your actual image
 
+// Scratch Effect Component
+const ScratchEffect = ({ imageSrc, containerStyle }) => {
+  const canvasRef = useRef(null);
+  const containerRef = useRef(null);
+  const [isScratched, setIsScratched] = useState(false);
+  const [isTouching, setIsTouching] = useState(false);
 
-import React, { useState, useEffect } from "react";
-import Profile from "../assets/Profile.png";
-import { Mail, Github, Linkedin, Twitter } from "lucide-react";
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-const Portfolio = () => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const ctx = canvas.getContext("2d");
+    let isDrawing = false;
+
+    const setupCanvas = () => {
+      const rect = container.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      ctx.fillStyle = "rgba(0, 0, 0, 0.9)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    };
+
+    const scratch = (clientX, clientY) => {
+      const rect = canvas.getBoundingClientRect();
+      const canvasX = clientX - rect.left;
+      const canvasY = clientY - rect.top;
+
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.beginPath();
+      
+      const gradient = ctx.createRadialGradient(canvasX, canvasY, 0, canvasX, canvasY, 40);
+      gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
+      gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+      
+      ctx.fillStyle = gradient;
+      ctx.arc(canvasX, canvasY, 40, 0, Math.PI * 2, false);
+      ctx.fill();
+      ctx.globalCompositeOperation = "source-over";
+      
+      if (!isScratched) setIsScratched(true);
+    };
+
+    // Mouse events
+    const handleMouseMove = (e) => {
+      if (isDrawing) scratch(e.clientX, e.clientY);
+    };
+
+    const handleMouseDown = (e) => {
+      e.preventDefault();
+      isDrawing = true;
+      scratch(e.clientX, e.clientY);
+    };
+
+    const handleMouseUp = () => {
+      isDrawing = false;
+    };
+
+    // Touch events
+    const handleTouchMove = (e) => {
+      e.preventDefault();
+      if (isTouching && e.touches.length > 0) {
+        const touch = e.touches[0];
+        scratch(touch.clientX, touch.clientY);
+      }
+    };
+
+    const handleTouchStart = (e) => {
+      e.preventDefault();
+      setIsTouching(true);
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        scratch(touch.clientX, touch.clientY);
+      }
+    };
+
+    const handleTouchEnd = (e) => {
+      e.preventDefault();
+      setIsTouching(false);
+    };
+
+    setupCanvas();
+    window.addEventListener("resize", setupCanvas);
+
+    // Add all event listeners
+    canvas.addEventListener("mousemove", handleMouseMove);
+    canvas.addEventListener("mousedown", handleMouseDown);
+    canvas.addEventListener("touchmove", handleTouchMove, { passive: false });
+    canvas.addEventListener("touchstart", handleTouchStart, { passive: false });
+    canvas.addEventListener("touchend", handleTouchEnd, { passive: false });
+    window.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      window.removeEventListener("resize", setupCanvas);
+      canvas.removeEventListener("mousemove", handleMouseMove);
+      canvas.removeEventListener("mousedown", handleMouseDown);
+      canvas.removeEventListener("touchmove", handleTouchMove);
+      canvas.removeEventListener("touchstart", handleTouchStart);
+      canvas.removeEventListener("touchend", handleTouchEnd);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [imageSrc, isTouching, isScratched]);
+
+  return (
+    <div ref={containerRef} style={containerStyle}>
+      <img src={imageSrc} alt="Profile Art" style={scratchStyles.aboutImage} />
+      <canvas ref={canvasRef} style={scratchStyles.scratchCanvas} />
+      {!isScratched && (
+        <div style={scratchStyles.scratchHint}>
+          
+          
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Home Component (Original Portfolio Content)
+const Home = ({ styles }) => {
   const [typewriterText, setTypewriterText] = useState("");
   const [typewriterIndex, setTypewriterIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -12,7 +132,7 @@ const Portfolio = () => {
 
   const texts = [
     "Blockchain Developer",
-    "Smart Contract Expert",
+    "Smart Contract Expert", 
     "DeFi Innovator",
     "Web3 Builder",
   ];
@@ -20,20 +140,17 @@ const Portfolio = () => {
   const services = [
     {
       title: "Smart Contract Development",
-      description:
-        "Secure and efficient smart contracts built on Ethereum, Solana and ICP.",
+      description: "Secure and efficient smart contracts built on Ethereum, Solana and ICP.",
       icon: "⚡",
     },
     {
-      title: "DApp Solutions",
-      description:
-        "Fully functional decentralized applications tailored to your needs.",
+      title: "DApp Solutions", 
+      description: "Fully functional decentralized applications tailored to your needs.",
       icon: "🔗",
     },
     {
       title: "smart contract auditor",
-      description:
-        "testing , auditing and making the contract less vulnerable.",
+      description: "testing , auditing and making the contract less vulnerable.",
       icon: "🔐",
     },
   ];
@@ -42,39 +159,28 @@ const Portfolio = () => {
     {
       id: 1,
       title: "AuctionVault",
-      description:
-        "A Decentralised Auction Platform , Real time bidding with Customised platform ABT Tokens.",
-      tech: [
-        "Solidity",
-        "React",
-        "Web3.js",
-        "IPFS",
-        "ABT (ERC20) Token",
-        "sepoila Test Network ",
-      ],
+      description: "A Decentralised Auction Platform , Real time bidding with Customised platform ABT Tokens.",
+      tech: ["Solidity", "React", "Web3.js", "IPFS", "ABT (ERC20) Token", "sepoila Test Network"],
       link: "https://github.com/AadityaMishra794/SIH-Astrominds--Frontend",
     },
     {
       id: 2,
-      title: "NFT Marketplace",
-      description:
-        "Full-featured NFT marketplace with minting, trading, and royalty management on multiple chains.",
-      tech: ["React.js", "Ethereum", "sepolia test netwrk "],
+      title: "NFT Marketplace", 
+      description: "Full-featured NFT marketplace with minting, trading, and royalty management on multiple chains.",
+      tech: ["React.js", "Ethereum", "sepolia test netwrk"],
       link: "https://github.com/AadityaMishra794/Smart-contract-projects",
     },
     {
       id: 3,
       title: "Fund hive",
-      description:
-        "Decentralized Crowdfunding Platform in which you anyone can create campaign for fund raising and anyone can donate",
+      description: "Decentralized Crowdfunding Platform in which you anyone can create campaign for fund raising and anyone can donate",
       tech: ["Solidity", "react", "truffle", "sepolia test network network"],
-      link: "https://lnkd.in/dHHiQn63",
+      link: "https://crowdfundhive.netlify.app/",
     },
     {
       id: 4,
       title: "Cross-Chain Bridge",
-      description:
-        "Secure asset bridge connecting Ethereum, Binance Smart Chain, and Polygon networks.",
+      description: "Secure asset bridge connecting Ethereum, Binance Smart Chain, and Polygon networks.",
       tech: ["Solidity", "Node.js", "Web3", "Chainlink"],
       link: "https://github.com/AadityaMishra794/polygonscan-clone-frontend-REACT.JS-",
     },
@@ -83,70 +189,383 @@ const Portfolio = () => {
   const testimonials = [
     {
       name: "Alice Johnson",
-      role: "CEO, Web3 Labs",
-      feedback:
-        "Working with Aaditya was a game-changer. His expertise in blockchain and smart contracts is unmatched!",
+      role: "CEO, Web3 Labs", 
+      feedback: "Working with Aaditya was a game-changer. His expertise in blockchain and smart contracts is unmatched!",
     },
     {
       name: "Raj Mehta",
       role: "Founder, CryptoCraft",
-      feedback:
-        "He delivered our DApp on time with flawless execution. Truly a Web3 innovator!",
+      feedback: "He delivered our DApp on time with flawless execution. Truly a Web3 innovator!",
     },
     {
-      name: "Sophia Lee",
+      name: "Sophia Lee", 
       role: "CTO, FinChain",
-      feedback:
-        "The professionalism and quality Aaditya brings are exceptional. Highly recommend for blockchain projects.",
+      feedback: "The professionalism and quality Aaditya brings are exceptional. Highly recommend for blockchain projects.",
     },
     {
       name: "Liam Smith",
       role: "Product Manager, DeFiX",
-      feedback:
-        "His deep understanding of DeFi protocols helped us scale our platform efficiently.",
+      feedback: "His deep understanding of DeFi protocols helped us scale our platform efficiently.",
     },
   ];
 
   // Typewriter Effect
   useEffect(() => {
-    const timeout = setTimeout(
-      () => {
-        const currentText = texts[currentTextIndex];
+    const timeout = setTimeout(() => {
+      const currentText = texts[currentTextIndex];
 
-        if (isDeleting) {
-          setTypewriterText(currentText.substring(0, typewriterIndex - 1));
-          setTypewriterIndex((prev) => prev - 1);
-        } else {
-          setTypewriterText(currentText.substring(0, typewriterIndex + 1));
-          setTypewriterIndex((prev) => prev + 1);
-        }
+      if (isDeleting) {
+        setTypewriterText(currentText.substring(0, typewriterIndex - 1));
+        setTypewriterIndex((prev) => prev - 1);
+      } else {
+        setTypewriterText(currentText.substring(0, typewriterIndex + 1));
+        setTypewriterIndex((prev) => prev + 1);
+      }
 
-        if (!isDeleting && typewriterIndex === currentText.length) {
-          setTimeout(() => setIsDeleting(true), 2000);
-        } else if (isDeleting && typewriterIndex === 0) {
-          setIsDeleting(false);
-          setCurrentTextIndex((prev) => (prev + 1) % texts.length);
-        }
-      },
-      isDeleting ? 50 : 100
-    );
+      if (!isDeleting && typewriterIndex === currentText.length) {
+        setTimeout(() => setIsDeleting(true), 2000);
+      } else if (isDeleting && typewriterIndex === 0) {
+        setIsDeleting(false);
+        setCurrentTextIndex((prev) => (prev + 1) % texts.length);
+      }
+    }, isDeleting ? 50 : 100);
 
     return () => clearTimeout(timeout);
-  }, [typewriterText, typewriterIndex, isDeleting, currentTextIndex]);
-  const handleMenuClick = (sectionId) => {
+  }, [typewriterText, typewriterIndex, isDeleting, currentTextIndex, texts]);
+
+  return (
+    <>
+      {/* Hero Section */}
+      <div style={styles.hero} className="hero">
+        <div style={styles.textSection} className="text-section">
+          <h1 style={styles.heroHeading}>
+            BUILDING THE <br />{" "}
+            <span style={styles.futurespan}>FUTURE </span>OF <br /> BLOCKCHAIN
+          </h1>
+          <p style={styles.heroText}>
+            A passionate blockchain developer creating <br />
+            innovative solutions that help businesses <br />
+            thrive in the decentralized world. From DeFi <br />
+            to NFTs, I build the future of Web3.
+          </p>
+          <p style={styles.glowText}>
+            {typewriterText}
+            <span style={{ color: "#ff1a1a" }}>|</span>
+          </p>
+          <button
+            style={styles.heroButton}
+            onClick={() => document.getElementById("projects").scrollIntoView({ behavior: "smooth" })}
+          >
+            EXPLORE MY WORK
+          </button>
+        </div>
+
+        <div style={styles.heroImage} className="hero-image">
+          <img src={ProfileImage} alt="Vector illustration" style={styles.image} />
+        </div>
+      </div>
+
+      {/* Services Section */}
+      <section id="services" style={styles.section} className="section">
+        <h2 style={styles.sectionHeading}>Services</h2>
+        <div style={styles.servicesGrid} className="services-grid">
+          {services.map((service, index) => (
+            <div key={index} style={styles.serviceCard}>
+              <span style={styles.serviceIcon}>{service.icon}</span>
+              <h3 style={styles.serviceTitle}>{service.title}</h3>
+              <p style={styles.serviceDescription}>{service.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Projects Section */}
+      <section id="projects" style={styles.section} className="section">
+        <h2 style={styles.sectionHeading}>Projects</h2>
+        <div style={styles.projectsGrid} className="projects-grid">
+          {projects.map((project) => (
+            <div key={project.id} style={styles.projectCard}>
+              <h3 style={styles.projectTitle}>{project.title}</h3>
+              <p style={styles.projectDescription}>{project.description}</p>
+              <div style={styles.techStack}>
+                {project.tech.map((t, i) => (
+                  <span key={i} style={styles.techTag}>{t}</span>
+                ))}
+              </div>
+              <a href={project.link} target="_blank" rel="noreferrer">
+                <button style={styles.projectButton}>Visit</button>
+              </a>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section id="testimonials" style={styles.section} className="section">
+        <h2 style={styles.sectionHeading}>Testimonials</h2>
+        <div style={styles.testimonialGrid} className="testimonial-grid">
+          {testimonials.map((t, index) => (
+            <div key={index} style={styles.testimonialCard}>
+              <p style={styles.testimonialFeedback}>"{t.feedback}"</p>
+              <h4 style={styles.testimonialName}>{t.name}</h4>
+              <p style={styles.testimonialRole}>{t.role}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    </>
+  );
+};
+
+// About Page Component
+const AboutPage = ({ styles }) => {
+  const [contentVisible, setContentVisible] = useState(false);
+  const [skillsAnimated, setSkillsAnimated] = useState(false);
+
+  const skillData = [
+    { title: "Blockchain Dev", percentage: 80, icon: Zap },
+    { title: "Smart Contracts", percentage: 95, icon: Shield },
+    { title: "Security Learning", percentage: 70, icon: Lock },
+  ];
+
+  useEffect(() => {
+    const timer1 = setTimeout(() => setContentVisible(true), 300);
+    const timer2 = setTimeout(() => setSkillsAnimated(true), 800);
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+    };
+  }, []);
+
+  const SkillBar = ({ title, percentage, icon: Icon }) => (
+    <div style={aboutStyles.skillBarContainer}>
+      <div style={aboutStyles.skillHeader}>
+        <div style={aboutStyles.skillTitle}>
+          <Icon size={16} style={aboutStyles.skillIcon} />
+          {title}
+        </div>
+        <span style={aboutStyles.skillPercentage}>{percentage}%</span>
+      </div>
+      <div style={aboutStyles.progressBarBackground}>
+        <div
+          style={{
+            ...aboutStyles.progressBarFill,
+            width: skillsAnimated ? `${percentage}%` : "0%",
+          }}
+        ></div>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      {/* About Section */}
+      <section style={aboutStyles.aboutSection} className="about-section">
+        {/* LEFT SIDE: Interactive Image */}
+        <div style={aboutStyles.aboutLeft} className="about-left">
+          <ScratchEffect
+            imageSrc={AboutImage}
+            containerStyle={aboutStyles.scratchContainer}
+          />
+        </div>
+
+        {/* RIGHT SIDE: Content */}
+        <div
+          style={{
+            ...aboutStyles.aboutRight,
+            opacity: contentVisible ? 1 : 0,
+            transform: contentVisible ? "translateY(0)" : "translateY(30px)",
+            transition: "opacity 0.8s ease, transform 0.8s ease",
+          }}
+          className="about-right"
+        >
+          <h2 style={aboutStyles.aboutHeading}>ABOUT ME</h2>
+          <p style={aboutStyles.aboutSubHeading}>
+            Blockchain Developer | Web3 Innovator | Security Learner
+          </p>
+
+          <p style={aboutStyles.aboutText}>
+            I am a passionate blockchain developer creating innovative solutions
+            that thrive in the decentralized world. From DeFi to NFTs, I build
+            the future using cutting-edge technologies like Rust and
+            zero-knowledge proofs. I focus on{" "}
+            <strong>security, efficiency, and scale</strong> to deliver robust
+            decentralized applications.
+          </p>
+
+          {/* Badges */}
+          <div style={aboutStyles.badgeContainer}>
+            <span style={aboutStyles.badge} className="pulse-badge">
+              Smart Contract Expert
+            </span>
+            <span style={aboutStyles.badge} className="pulse-badge">
+              Rust Learner
+            </span>
+            <span style={aboutStyles.badge} className="pulse-badge">
+              ZK Proofs
+            </span>
+          </div>
+
+          {/* Skill Bars */}
+          <div style={aboutStyles.skillSection}>
+            {skillData.map((skill, index) => (
+              <SkillBar key={index} {...skill} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* HIRE ME SECTION - FULL WIDTH */}
+      <div style={aboutStyles.hireMeSection} className="hire-me-section">
+        <h2 style={aboutStyles.hireMeHeading} className="hire-me-heading">Why You Should Hire Me</h2>
+
+        <p style={aboutStyles.hireMeText} className="hire-me-text">
+          I am a dedicated blockchain developer who thrives on creating secure
+          and efficient decentralized solutions. My experience with smart
+          contracts, Rust, and zero-knowledge proofs allows me to tackle
+          complex problems while keeping scalability and security in focus. I
+          constantly strive to learn and implement innovative technologies
+          that can make a meaningful impact.
+        </p>
+
+        <p style={aboutStyles.hireMeText} className="hire-me-text">
+          Beyond technical expertise, I bring creativity, adaptability, and a
+          collaborative mindset to every project. I take ownership of my work
+          and aim to exceed expectations. By hiring me, you gain a developer
+          who is passionate, results-driven, and committed to building robust,
+          future-ready blockchain applications.
+        </p>
+      </div>
+    </>
+  );
+};
+
+// Main Portfolio Router Component
+const Portfolio = () => {
+  const [currentPage, setCurrentPage] = useState('home');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    // Handle hash changes
+    const handleHashChange = () => {
+      const hash = window.location.hash.substring(1);
+      if (hash === 'about') {
+        setCurrentPage('about');
+      } else {
+        setCurrentPage('home');
+      }
+    };
+
+    // Listen for hash changes
+    window.addEventListener('hashchange', handleHashChange);
+    
+    // Initial check
+    handleHashChange();
+
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  const handleNavClick = (page) => {
     setMobileMenuOpen(false);
-    if (sectionId) {
-      document.getElementById(sectionId).scrollIntoView({ behavior: "smooth" });
+    if (page === 'about') {
+      window.location.hash = '#about';
+    } else if (page === 'home') {
+      window.location.hash = '#home';
+    } else {
+      // For services and projects, scroll to section on home page
+      if (currentPage !== 'home') {
+        window.location.hash = '#home';
+        setTimeout(() => {
+          document.getElementById(page)?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      } else {
+        document.getElementById(page)?.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 
   return (
     <div style={styles.body}>
       <style>
-         {`
+        {`
+          @keyframes moveArrow {
+            from { transform: translateX(-5px); }
+            to { transform: translateX(5px); }
+          }
+          
+          @keyframes pulse {
+            0%, 100% { 
+              box-shadow: 0 0 5px rgba(255, 26, 26, 0.5);
+              transform: scale(1);
+            }
+            50% { 
+              box-shadow: 0 0 20px rgba(255, 26, 26, 0.8);
+              transform: scale(1.05);
+            }
+          }
+          
+          .pulse-badge:hover {
+            animation: pulse 1s ease-in-out;
+            background: rgba(255, 26, 26, 0.3) !important;
+          }
+          
+          /* Tablet and smaller desktop */
+          @media (max-width: 1200px) {
+            .hero { 
+              padding: 6rem 3rem !important;
+              paddingTop: 9rem !important;
+            }
+            .section { 
+              padding: 4rem 3rem !important; 
+            }
+            .about-section { 
+              padding: 6rem 3rem 4rem 3rem !important;
+            }
+            .hire-me-section {
+              padding: 3.5rem 3rem !important;
+            }
+            .hire-me-heading {
+              font-size: 2.8rem !important;
+            }
+          }
+          
+          @media (max-width: 1024px) {
+            .about-section { 
+              flex-direction: column !important;
+              gap: 3rem !important;
+              padding: 8rem 3rem 5rem 3rem !important;
+            }
+            .about-left, .about-right { 
+              max-width: 100% !important;
+              flex: none !important;
+            }
+            .about-left {
+              order: 1;
+              margin-bottom: 2rem;
+              margin-top: 2rem !important;
+            }
+            .about-right {
+              order: 2;
+            }
+            .hire-me-section {
+              padding: 3rem 2.5rem !important;
+            }
+            .hire-me-heading {
+              font-size: 2.6rem !important;
+            }
+          }
+          
           @media (max-width: 768px) {
-            .hero { flex-direction: column !important; text-align: center !important; padding: 8rem 2rem 4rem !important; }
-            .text-section { max-width: 100% !important; margin-bottom: 2rem !important; }
+            .hero { 
+              flex-direction: column !important; 
+              text-align: center !important; 
+              padding: 8rem 2rem 4rem !important; 
+            }
+            .text-section { 
+              max-width: 100% !important; 
+              margin-bottom: 2rem !important; 
+            }
             .hero-image { max-width: 80% !important; }
             .hero h1 { font-size: 2.5rem !important; }
             .hero p { font-size: 0.9rem !important; }
@@ -159,12 +578,136 @@ const Portfolio = () => {
             .services-grid { grid-template-columns: 1fr !important; }
             .projects-grid { grid-template-columns: 1fr !important; }
             .testimonial-grid { grid-template-columns: 1fr !important; }
+            
+            .about-section { 
+              padding: 6rem 2rem 4rem 2rem !important; 
+              gap: 2rem !important;
+            }
+            .about-left {
+              margin-bottom: 1.5rem;
+              margin-top: 3rem !important;
+            }
+            .about-heading {
+              font-size: 2.5rem !important;
+            }
+            .about-sub-heading {
+              font-size: 1rem !important;
+            }
+            .badge-container {
+              justify-content: center;
+              gap: 0.5rem !important;
+            }
+            .hire-me-section {
+              padding: 3rem 2rem !important;
+              margin-top: 3rem !important;
+            }
+            .hire-me-heading {
+              font-size: 2.4rem !important;
+            }
+            .hire-me-text {
+              font-size: 1.05rem !important;
+            }
           }
+          
           @media (max-width: 480px) {
             .hero h1 { font-size: 2rem !important; }
             .section { padding: 2rem 1rem !important; }
             .logo { font-size: 1.2rem !important; }
             .navbar { padding: 0.8rem !important; }
+            
+            .about-section { 
+              padding: 5rem 1rem 3rem 1rem !important;
+            }
+            .about-left {
+              margin-top: 4rem !important;
+            }
+            .about-heading {
+              font-size: 2rem !important;
+            }
+            .about-sub-heading {
+              font-size: 0.9rem !important;
+            }
+            .about-text {
+              font-size: 0.9rem !important;
+            }
+            .hire-me-section {
+              padding: 3rem 1rem !important;
+            }
+            .hire-me-heading {
+              font-size: 2.2rem !important;
+            }
+            .hire-me-text {
+              font-size: 1rem !important;
+            }
+          }
+          
+          @media (max-width: 360px) {
+            .hero h1 { font-size: 1.8rem !important; }
+            .hero p { font-size: 0.85rem !important; }
+            .section { padding: 1.5rem 0.8rem !important; }
+            .navbar { padding: 0.6rem !important; }
+            .logo { font-size: 1.1rem !important; }
+            
+            .about-section { 
+              padding: 4rem 0.8rem 2.5rem 0.8rem !important;
+            }
+            .about-left {
+              margin-top: 5rem !important;
+            }
+            .about-heading {
+              font-size: 1.8rem !important;
+            }
+            .about-sub-heading {
+              font-size: 0.85rem !important;
+            }
+            .about-text {
+              font-size: 0.85rem !important;
+            }
+            .hire-me-section {
+              padding: 2.5rem 0.8rem !important;
+              margin-top: 2rem !important;
+            }
+            .hire-me-heading {
+              font-size: 2rem !important;
+            }
+            .hire-me-text {
+              font-size: 0.95rem !important;
+            }
+          }
+          
+          @media (min-width: 1200px) {
+            .container {
+              maxWidth: "1200px",
+            }
+            .hero {
+              padding: "8rem 5rem" !important;
+              paddingTop: "12rem" !important;
+            }
+            .section {
+              padding: "6rem 5rem" !important;
+            }
+            .about-section {
+              padding: "8rem 5rem 6rem 5rem" !important;
+            }
+            .hire-me-section {
+              padding: "5rem 6rem" !important;
+            }
+          }
+          
+          @media (min-width: 1400px) {
+            .hero {
+              padding: "10rem 6rem" !important;
+              paddingTop: "14rem" !important;
+            }
+            .section {
+              padding: "7rem 6rem" !important;
+            }
+            .about-section {
+              padding: "10rem 6rem 8rem 6rem" !important;
+            }
+            .hire-me-section {
+              padding: "6rem 8rem" !important;
+            }
           }
           
           .mobile-menu {
@@ -201,158 +744,304 @@ const Portfolio = () => {
           }
         `}
       </style>
+      
       <div style={styles.container}>
         {/* Social Sidebar */}
         <div style={styles.socialSidebar} className="social-sidebar">
-          <a
-            target="_blank"
-            rel="noreferrer"
-            href="mailto:etherbraider@gmail.com"
-            style={styles.socialLink}
-          >
+          <a target="_blank" rel="noreferrer" href="mailto:etherbraider@gmail.com" style={styles.socialLink}>
             <Mail size={20} />
           </a>
-          <a
-            target="_blank"
-            rel="noreferrer"
-            href="https://x.com/AadiM794"
-            style={styles.socialLink}
-          >
+          <a target="_blank" rel="noreferrer" href="https://x.com/AadiM794" style={styles.socialLink}>
             <Twitter size={20} />
           </a>
-          <a
-            target="_blank"
-            rel="noreferrer"
-            href="https://github.com/AadityaMishra794"
-            style={styles.socialLink}
-          >
+          <a target="_blank" rel="noreferrer" href="https://github.com/AadityaMishra794" style={styles.socialLink}>
             <Github size={20} />
           </a>
-          <a
-            target="_blank"
-            rel="noreferrer"
-            href="https://linkedin.com/in/aaditya-mishra-5b6b2b255/"
-            style={styles.socialLink}
-          >
+          <a target="_blank" rel="noreferrer" href="https://linkedin.com/in/aaditya-mishra-5b6b2b255/" style={styles.socialLink}>
             <Linkedin size={20} />
           </a>
         </div>
 
         {/* Navbar */}
         <nav style={styles.navbar} className="navbar">
-          <a href="/"><h1 style={styles.logo}>
-            Ether<span style={styles.logoSpan}>Braider</span>
-          </h1></a>
-          <ul style={styles.navLinks}>
+          <a href="#home" onClick={() => handleNavClick('home')}>
+            <h1 style={styles.logo}>
+              Ether<span style={styles.logoSpan}>Braider</span>
+            </h1>
+          </a>
+          
+          <ul style={styles.navLinks} className="nav-links">
             <li>
-              <a href="#services" style={styles.navLink}>
+              <a href="#services" style={styles.navLink} onClick={(e) => { e.preventDefault(); handleNavClick('services'); }}>
                 Services
               </a>
             </li>
             <li>
-              <a href="#projects" style={styles.navLink}>
+              <a href="#projects" style={styles.navLink} onClick={(e) => { e.preventDefault(); handleNavClick('projects'); }}>
                 Projects
               </a>
             </li>
             <li>
-              <a href="#about" style={styles.navLink}>
+              <a href="#about" style={styles.navLink} onClick={(e) => { e.preventDefault(); handleNavClick('about'); }}>
                 About
               </a>
             </li>
           </ul>
+
+          <button 
+            className="mobile-menu-button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            ☰
+          </button>
         </nav>
 
-        {/* Hero Section */}
-        <div style={styles.hero} className="hero">
-          <div style={styles.textSection} className="text-section">
-           
-            <h1 style={styles.heroHeading}>
-              BUILDING THE <br />{" "}
-              <span style={styles.futurespan}>FUTURE </span>OF <br /> BLOCKCHAIN
-            </h1>
-            <p style={styles.heroText}>
-              A passionate blockchain developer creating <br />
-              innovative solutions that help businesses <br />
-              thrive in the decentralized world. From DeFi <br />
-              to NFTs, I build the future of Web3.
-            </p>
-            <p style={styles.glowText}>
-              {typewriterText}
-              <span style={{ color: "#ff1a1a" }}>|</span>
-            </p>
-            <button
-              style={styles.heroButton}
-              onClick={() =>
-                document
-                  .getElementById("projects")
-                  .scrollIntoView({ behavior: "smooth" })
-              }
-            >
-              EXPLORE MY WORK
-            </button>
-          </div>
-
-          <div style={styles.heroImage} className="hero-image">
-            <img src={Profile} alt="Vector illustration" style={styles.image} />
-          </div>
+        {/* Mobile Menu */}
+        <div className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
+          <ul style={{ listStyle: 'none', padding: '2rem', margin: 0 }}>
+            <li style={{ marginBottom: '1rem' }}>
+              <a href="#services" style={styles.navLink} onClick={(e) => { e.preventDefault(); handleNavClick('services'); }}>
+                Services
+              </a>
+            </li>
+            <li style={{ marginBottom: '1rem' }}>
+              <a href="#projects" style={styles.navLink} onClick={(e) => { e.preventDefault(); handleNavClick('projects'); }}>
+                Projects
+              </a>
+            </li>
+            <li>
+              <a href="#about" style={styles.navLink} onClick={(e) => { e.preventDefault(); handleNavClick('about'); }}>
+                About
+              </a>
+            </li>
+          </ul>
         </div>
 
-        {/* Services Section */}
-        <section id="services" style={styles.section} className="section">
-          <h2 style={styles.sectionHeading}>Services</h2>
-          <div style={styles.servicesGrid} className="services-grid">
-            {services.map((service, index) => (
-              <div key={index} style={styles.serviceCard}>
-                <span style={styles.serviceIcon}>{service.icon}</span>
-                <h3 style={styles.serviceTitle}>{service.title}</h3>
-                <p style={styles.serviceDescription}>{service.description}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Projects Section */}
-        <section id="projects" style={styles.section} className="section">
-          <h2 style={styles.sectionHeading}>Projects</h2>
-          <div style={styles.projectsGrid} className="projects-grid">
-            {projects.map((project) => (
-              <div key={project.id} style={styles.projectCard}>
-                <h3 style={styles.projectTitle}>{project.title}</h3>
-                <p style={styles.projectDescription}>{project.description}</p>
-                <div style={styles.techStack}>
-                  {project.tech.map((t, i) => (
-                    <span key={i} style={styles.techTag}>
-                      {t}
-                    </span>
-                  ))}
-                </div>
-                <a href={project.link} target="_blank" rel="noreferrer">
-                  <button style={styles.projectButton}>Visit</button>
-                </a>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Testimonials Section */}
-        <section id="testimonials" style={styles.section} className="section">
-          <h2 style={styles.sectionHeading}>Testimonials</h2>
-          <div style={styles.testimonialGrid} className="testimonial-grid">
-            {testimonials.map((t, index) => (
-              <div key={index} style={styles.testimonialCard}>
-                <p style={styles.testimonialFeedback}>"{t.feedback}"</p>
-                <h4 style={styles.testimonialName}>{t.name}</h4>
-                <p style={styles.testimonialRole}>{t.role}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+        {/* Conditional Rendering Based on Current Page */}
+        {currentPage === 'home' ? <Home styles={styles} /> : <AboutPage styles={styles} />}
       </div>
     </div>
   );
 };
 
-// Styles
+// Styles for Scratch Effect
+const scratchStyles = {
+  aboutImage: {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    display: "block",
+    borderRadius: "10px",
+    margintop :"-5rem",
+  },
+  scratchCanvas: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    cursor: "crosshair",
+    zIndex: 2,
+    borderRadius: "10px",
+  },
+  scratchHint: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    color: "#fff",
+    fontSize: "1.2rem",
+    textAlign: "center",
+    pointerEvents: "none",
+    opacity: 0.8,
+    transition: "opacity 0.5s",
+    zIndex: 3,
+  },
+  scratchArrow: {
+    color: "#ff1a1a",
+    marginBottom: "10px",
+    animation: "moveArrow 1s infinite alternate",
+  },
+};
+
+// About Page Specific Styles
+const aboutStyles = {
+  aboutSection: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
+    padding: "2rem 4rem 5rem 4rem",
+    width: "100%",
+    boxSizing: "border-box",
+    gap: "4rem",
+    minHeight: "calc(100vh - 80px)",
+    flexWrap: "wrap", // responsive
+  },
+  aboutLeft: {
+    flex: 1,
+    maxWidth: "45%",
+    minHeight: "400px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-start", // aligns image to top of container
+    position: "relative",
+    marginTop: "-6rem", // shift image slightly up
+  },
+  aboutRight: {
+    flex: 1,
+    maxWidth: "55%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start", // aligns text from top
+  },
+  scratchContainer: {
+    position: "relative",
+    width: "100%",
+    maxWidth: "500px",
+    aspectRatio: "1 / 1",
+    borderRadius: "10px",
+    overflow: "hidden",
+    marginTop: "-6rem", // image aligned slightly up
+  },
+  aboutHeading: {
+    fontSize: "3rem",
+    fontWeight: 800,
+    color: "#ff1a1a",
+    marginBottom: "1rem",
+    fontFamily: "'Orbitron', sans-serif",
+  },
+  aboutSubHeading: {
+    fontSize: "1.2rem",
+    color: "#aaa",
+    marginBottom: "2rem",
+    fontWeight: 300,
+  },
+  aboutText: {
+    fontSize: "1rem",
+    lineHeight: 1.7,
+    color: "#ccc",
+    marginBottom: "3rem",
+  },
+  badgeContainer: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "1rem",
+    marginBottom: "3rem",
+  },
+  badge: {
+    background: "rgba(255, 26, 26, 0.1)",
+    color: "#ff1a1a",
+    border: "1px solid #ff1a1a",
+    padding: "8px 16px",
+    borderRadius: "20px",
+    fontSize: "0.9rem",
+    fontWeight: "bold",
+    textShadow: "0 0 5px rgba(255, 26, 26, 0.5)",
+    cursor: "pointer",
+    transition: "all 0.3s ease",
+  },
+  skillSection: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "1.5rem",
+  },
+  skillBarContainer: {
+    width: "100%",
+    maxWidth: "400px",
+  },
+  skillHeader: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: "5px",
+  },
+  skillTitle: {
+    color: "#fff",
+    fontWeight: "bold",
+    display: "flex",
+    alignItems: "center",
+  },
+  skillIcon: {
+    marginRight: "8px",
+    color: "#ff1a1a",
+  },
+  skillPercentage: {
+    color: "#ff1a1a",
+    fontWeight: "bold",
+  },
+  progressBarBackground: {
+    height: "6px",
+    background: "rgba(50, 50, 50, 0.8)",
+    borderRadius: "3px",
+    marginTop: "5px",
+    overflow: "hidden",
+  },
+  progressBarFill: {
+    height: "100%",
+    background: "linear-gradient(90deg, #ff1a1a, #ff6d6d)",
+    transition: "width 2s ease-out",
+    boxShadow: "0 0 10px #ff1a1a",
+  },
+
+  // ---------------- HIRE ME SECTION ----------------
+  hireMeSection: {
+    width: "100%",
+    marginTop: "4rem",
+    padding: "4rem",
+    background: "linear-gradient(135deg, rgba(255, 26, 26, 0.08) 0%, rgba(0, 0, 0, 0.95) 100%)",
+    borderRadius: "20px",
+    boxSizing: "border-box",
+    textAlign: "center",
+    border: "2px solid rgba(255, 26, 26, 0.2)",
+    position: "relative",
+    overflow: "hidden",
+    boxShadow: "0 20px 40px rgba(255, 26, 26, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+  },
+  hireMeHeading: {
+    fontSize: "3rem",
+    fontWeight: 800,
+    background: "linear-gradient(135deg, #ff1a1a 0%, #ff6d6d 50%, #ffffff 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    backgroundClip: "text",
+    marginBottom: "2rem",
+    fontFamily: "'Orbitron', sans-serif",
+    textShadow: "0 0 30px rgba(255, 26, 26, 0.5)",
+    position: "relative",
+  },
+  hireMeText: {
+    fontSize: "1.1rem",
+    lineHeight: 1.8,
+    color: "#e0e0e0",
+    marginBottom: "2rem",
+    maxWidth: "800px",
+    margin: "0 auto 2rem auto",
+    fontWeight: 300,
+    letterSpacing: "0.3px",
+    position: "relative",
+    zIndex: 2,
+  },
+  // Responsive classes for hire me section
+  hireMeResponsive: {
+    "@media (max-width: 768px)": {
+      padding: "3rem 2rem",
+      marginTop: "3rem",
+    },
+    "@media (max-width: 480px)": {
+      padding: "2.5rem 1rem",
+      marginTop: "2rem",
+    },
+    "@media (max-width: 360px)": {
+      padding: "2rem 0.8rem",
+      marginTop: "1.5rem",
+    },
+  },
+};
+
+  // Hire Me Section Styles
+
+
+// Main Portfolio Styles
 const styles = {
   body: {
     margin: 0,
@@ -518,8 +1207,7 @@ const styles = {
     gap: "24px",
   },
   serviceCard: {
-    background:
-      "linear-gradient(135deg, rgba(31, 31, 31, 0.9) 0%, rgba(0, 0, 0, 0.9) 100%)",
+    background: "linear-gradient(135deg, rgba(31, 31, 31, 0.9) 0%, rgba(0, 0, 0, 0.9) 100%)",
     padding: "32px",
     borderRadius: "16px",
     border: "1px solid rgba(220, 38, 38, 0.2)",
