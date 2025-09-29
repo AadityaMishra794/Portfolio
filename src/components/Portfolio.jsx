@@ -4,121 +4,37 @@ import ProfileImage from "../assets/Profile.png";
 import AboutImage from "../assets/About.png";
 // Profile image placeholder - replace with your actual image
 
-// Scratch Effect Component
-const ScratchEffect = ({ imageSrc, containerStyle }) => {
-  const canvasRef = useRef(null);
-  const containerRef = useRef(null);
-  const [isScratched, setIsScratched] = useState(false);
-  const [isTouching, setIsTouching] = useState(false);
+// Animated Reveal Effect Component
+const AnimatedReveal = ({ imageSrc, containerStyle, isAboutImage = false }) => {
+  const [isRevealed, setIsRevealed] = useState(false);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const timer = setTimeout(() => {
+      setIsRevealed(true);
+    }, 1000);
 
-    const container = containerRef.current;
-    if (!container) return;
-
-    const ctx = canvas.getContext("2d");
-    let isDrawing = false;
-
-    const setupCanvas = () => {
-      const rect = container.getBoundingClientRect();
-      canvas.width = rect.width;
-      canvas.height = rect.height;
-      ctx.fillStyle = "rgba(0, 0, 0, 0.9)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    };
-
-    const scratch = (clientX, clientY) => {
-      const rect = canvas.getBoundingClientRect();
-      const canvasX = clientX - rect.left;
-      const canvasY = clientY - rect.top;
-
-      ctx.globalCompositeOperation = "destination-out";
-      ctx.beginPath();
-      
-      const gradient = ctx.createRadialGradient(canvasX, canvasY, 0, canvasX, canvasY, 40);
-      gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
-      gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
-      
-      ctx.fillStyle = gradient;
-      ctx.arc(canvasX, canvasY, 40, 0, Math.PI * 2, false);
-      ctx.fill();
-      ctx.globalCompositeOperation = "source-over";
-      
-      if (!isScratched) setIsScratched(true);
-    };
-
-    // Mouse events
-    const handleMouseMove = (e) => {
-      if (isDrawing) scratch(e.clientX, e.clientY);
-    };
-
-    const handleMouseDown = (e) => {
-      e.preventDefault();
-      isDrawing = true;
-      scratch(e.clientX, e.clientY);
-    };
-
-    const handleMouseUp = () => {
-      isDrawing = false;
-    };
-
-    // Touch events
-    const handleTouchMove = (e) => {
-      e.preventDefault();
-      if (isTouching && e.touches.length > 0) {
-        const touch = e.touches[0];
-        scratch(touch.clientX, touch.clientY);
-      }
-    };
-
-    const handleTouchStart = (e) => {
-      e.preventDefault();
-      setIsTouching(true);
-      if (e.touches.length > 0) {
-        const touch = e.touches[0];
-        scratch(touch.clientX, touch.clientY);
-      }
-    };
-
-    const handleTouchEnd = (e) => {
-      e.preventDefault();
-      setIsTouching(false);
-    };
-
-    setupCanvas();
-    window.addEventListener("resize", setupCanvas);
-
-    // Add all event listeners
-    canvas.addEventListener("mousemove", handleMouseMove);
-    canvas.addEventListener("mousedown", handleMouseDown);
-    canvas.addEventListener("touchmove", handleTouchMove, { passive: false });
-    canvas.addEventListener("touchstart", handleTouchStart, { passive: false });
-    canvas.addEventListener("touchend", handleTouchEnd, { passive: false });
-    window.addEventListener("mouseup", handleMouseUp);
-
-    return () => {
-      window.removeEventListener("resize", setupCanvas);
-      canvas.removeEventListener("mousemove", handleMouseMove);
-      canvas.removeEventListener("mousedown", handleMouseDown);
-      canvas.removeEventListener("touchmove", handleTouchMove);
-      canvas.removeEventListener("touchstart", handleTouchStart);
-      canvas.removeEventListener("touchend", handleTouchEnd);
-      window.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [imageSrc, isTouching, isScratched]);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <div ref={containerRef} style={containerStyle}>
-      <img src={imageSrc} alt="Profile Art" style={scratchStyles.aboutImage} />
-      <canvas ref={canvasRef} style={scratchStyles.scratchCanvas} />
-      {!isScratched && (
-        <div style={scratchStyles.scratchHint}>
-          
-          
-        </div>
-      )}
+    <div style={containerStyle}>
+      <div style={animatedStyles.imageContainer}>
+        <img 
+          src={imageSrc} 
+          alt={isAboutImage ? "Profile Art" : "Vector illustration"} 
+          style={{
+            ...animatedStyles.aboutImage,
+            opacity: isAboutImage ? (isRevealed ? 1 : 0) : 1,
+            transition: isAboutImage ? "opacity 3s ease-in-out" : "none"
+          }} 
+        />
+        <div 
+          style={{
+            ...animatedStyles.scratchOverlay,
+            clipPath: isRevealed ? 'polygon(0 0, 0 0, 0 100%, 0 100%)' : 'polygon(0 0, 100% 0, 100% 100%, 0 100%)'
+          }}
+        ></div>
+      </div>
     </div>
   );
 };
@@ -261,7 +177,10 @@ const Home = ({ styles }) => {
         </div>
 
         <div style={styles.heroImage} className="hero-image">
-          <img src={ProfileImage} alt="Vector illustration" style={styles.image} />
+          <AnimatedReveal
+            imageSrc={ProfileImage}
+            containerStyle={styles.profileImageContainer}
+          />
         </div>
       </div>
 
@@ -364,11 +283,13 @@ const AboutPage = ({ styles }) => {
       <section style={aboutStyles.aboutSection} className="about-section">
         {/* LEFT SIDE: Interactive Image */}
         <div style={aboutStyles.aboutLeft} className="about-left">
-          <ScratchEffect
+          <AnimatedReveal
             imageSrc={AboutImage}
             containerStyle={aboutStyles.scratchContainer}
+            isAboutImage={true}
           />
         </div>
+        
 
         {/* RIGHT SIDE: Content */}
         <div
@@ -508,6 +429,24 @@ const Portfolio = () => {
           .pulse-badge:hover {
             animation: pulse 1s ease-in-out;
             background: rgba(255, 26, 26, 0.3) !important;
+          }
+          
+          @keyframes scratchReveal {
+            0% { 
+              clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); 
+            }
+            25% {
+              clip-path: polygon(0 0, 75% 0, 85% 100%, 0 100%);
+            }
+            50% {
+              clip-path: polygon(0 0, 50% 0, 60% 100%, 0 100%);
+            }
+            75% {
+              clip-path: polygon(0 0, 25% 0, 35% 100%, 0 100%);
+            }
+            100% { 
+              clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); 
+            }
           }
           
           /* Tablet and smaller desktop */
@@ -824,43 +763,33 @@ const Portfolio = () => {
   );
 };
 
-// Styles for Scratch Effect
-const scratchStyles = {
+// Styles for Animated Reveal Effect
+const animatedStyles = {
+  imageContainer: {
+    position: "relative",
+    width: "100%",
+    height: "100%",
+    borderRadius: "10px",
+    overflow: "hidden",
+  },
   aboutImage: {
     width: "100%",
     height: "100%",
     objectFit: "cover",
     display: "block",
     borderRadius: "10px",
-    margintop :"-5rem",
   },
-  scratchCanvas: {
+  scratchOverlay: {
     position: "absolute",
     top: 0,
     left: 0,
     width: "100%",
     height: "100%",
-    cursor: "crosshair",
+    background: "linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(255, 26, 26, 0.1) 50%, rgba(0, 0, 0, 0.9) 100%)",
+    backdropFilter: "blur(2px)",
+    transition: "clip-path 3s ease-in-out",
+    animation: "scratchReveal 3s ease-in-out forwards",
     zIndex: 2,
-    borderRadius: "10px",
-  },
-  scratchHint: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    color: "#fff",
-    fontSize: "1.2rem",
-    textAlign: "center",
-    pointerEvents: "none",
-    opacity: 0.8,
-    transition: "opacity 0.5s",
-    zIndex: 3,
-  },
-  scratchArrow: {
-    color: "#ff1a1a",
-    marginBottom: "10px",
-    animation: "moveArrow 1s infinite alternate",
   },
 };
 
@@ -1178,10 +1107,13 @@ const styles = {
     maxWidth: "45%",
     overflow: "hidden",
   },
-  image: {
+  profileImageContainer: {
+    position: "relative",
     width: "100%",
     height: "auto",
-    objectFit: "contain",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     maxWidth: "100%",
   },
   section: {
