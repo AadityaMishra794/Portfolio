@@ -1,11 +1,20 @@
+
 import React, { useState, useEffect, useRef } from "react";
-import { Mail, Github, Linkedin, Twitter, Zap, Lock, Shield, ArrowRight } from "lucide-react";
+import {
+  Mail,
+  Github,
+  Linkedin,
+  Twitter,
+  Zap,
+  Lock,
+  Shield,
+  ArrowRight,
+} from "lucide-react";
 import ProfileImage from "../assets/Profile.png";
 import AboutImage from "../assets/About.png";
-// Profile image placeholder - replace with your actual image
 
 // Animated Reveal Effect Component
-const AnimatedReveal = ({ imageSrc, containerStyle, isAboutImage = false }) => {
+const AnimatedReveal = ({ imageSrc, containerStyle, isAboutImage = false, isProfileImage = false }) => {
   const [isRevealed, setIsRevealed] = useState(false);
 
   useEffect(() => {
@@ -19,19 +28,21 @@ const AnimatedReveal = ({ imageSrc, containerStyle, isAboutImage = false }) => {
   return (
     <div style={containerStyle}>
       <div style={animatedStyles.imageContainer}>
-        <img 
-          src={imageSrc} 
-          alt={isAboutImage ? "Profile Art" : "Vector illustration"} 
+        <img
+          src={imageSrc}
+          alt={isAboutImage ? "Profile Art" : isProfileImage ? "Profile" : "Vector illustration"}
           style={{
             ...animatedStyles.aboutImage,
-            opacity: isAboutImage ? (isRevealed ? 1 : 0) : 1,
-            transition: isAboutImage ? "opacity 3s ease-in-out" : "none"
-          }} 
+            opacity: (isAboutImage || isProfileImage) ? (isRevealed ? 1 : 0) : 1,
+            transition: (isAboutImage || isProfileImage) ? "opacity 3s ease-in-out" : "none",
+          }}
         />
-        <div 
+        <div
           style={{
             ...animatedStyles.scratchOverlay,
-            clipPath: isRevealed ? 'polygon(0 0, 0 0, 0 100%, 0 100%)' : 'polygon(0 0, 100% 0, 100% 100%, 0 100%)'
+            clipPath: isRevealed
+              ? "polygon(0 0, 0 0, 0 100%, 0 100%)"
+              : "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
           }}
         ></div>
       </div>
@@ -48,7 +59,7 @@ const Home = ({ styles }) => {
 
   const texts = [
     "Blockchain Developer",
-    "Smart Contract Expert", 
+    "Smart Contract Expert",
     "DeFi Innovator",
     "Web3 Builder",
   ];
@@ -56,17 +67,20 @@ const Home = ({ styles }) => {
   const services = [
     {
       title: "Smart Contract Development",
-      description: "Secure and efficient smart contracts built on Ethereum, Solana and ICP.",
+      description:
+        "Secure and efficient smart contracts built on Ethereum, Solana and ICP.",
       icon: "⚡",
     },
     {
-      title: "DApp Solutions", 
-      description: "Fully functional decentralized applications tailored to your needs.",
+      title: "DApp Solutions",
+      description:
+        "Fully functional decentralized applications tailored to your needs.",
       icon: "🔗",
     },
     {
       title: "smart contract auditor",
-      description: "testing , auditing and making the contract less vulnerable.",
+      description:
+        "testing , auditing and making the contract less vulnerable.",
       icon: "🔐",
     },
   ];
@@ -75,28 +89,39 @@ const Home = ({ styles }) => {
     {
       id: 1,
       title: "AuctionVault",
-      description: "A Decentralised Auction Platform , Real time bidding with Customised platform ABT Tokens.",
-      tech: ["Solidity", "React", "Web3.js", "IPFS", "ABT (ERC20) Token", "sepoila Test Network"],
+      description:
+        "A Decentralised Auction Platform , Real time bidding with Customised platform ABT Tokens.",
+      tech: [
+        "Solidity",
+        "React",
+        "Web3.js",
+        "IPFS",
+        "ABT (ERC20) Token",
+        "sepoila Test Network",
+      ],
       link: "https://github.com/AadityaMishra794/SIH-Astrominds--Frontend",
     },
     {
       id: 2,
-      title: "NFT Marketplace", 
-      description: "Full-featured NFT marketplace with minting, trading, and royalty management on multiple chains.",
+      title: "NFT Marketplace",
+      description:
+        "Full-featured NFT marketplace with minting, trading, and royalty management on multiple chains.",
       tech: ["React.js", "Ethereum", "sepolia test netwrk"],
       link: "https://github.com/AadityaMishra794/Smart-contract-projects",
     },
     {
       id: 3,
       title: "Fund hive",
-      description: "Decentralized Crowdfunding Platform in which you anyone can create campaign for fund raising and anyone can donate",
+      description:
+        "Decentralized Crowdfunding Platform in which you anyone can create campaign for fund raising and anyone can donate",
       tech: ["Solidity", "react", "truffle", "sepolia test network network"],
       link: "https://crowdfundhive.netlify.app/",
     },
     {
       id: 4,
       title: "Cross-Chain Bridge",
-      description: "Secure asset bridge connecting Ethereum, Binance Smart Chain, and Polygon networks.",
+      description:
+        "Secure asset bridge connecting Ethereum, Binance Smart Chain, and Polygon networks.",
       tech: ["Solidity", "Node.js", "Web3", "Chainlink"],
       link: "https://github.com/AadityaMishra794/polygonscan-clone-frontend-REACT.JS-",
     },
@@ -105,46 +130,53 @@ const Home = ({ styles }) => {
   const testimonials = [
     {
       name: "Alice Johnson",
-      role: "CEO, Web3 Labs", 
-      feedback: "Working with Aaditya was a game-changer. His expertise in blockchain and smart contracts is unmatched!",
+      role: "CEO, Web3 Labs",
+      feedback:
+        "Working with Aaditya was a game-changer. His expertise in blockchain and smart contracts is unmatched!",
     },
     {
       name: "Raj Mehta",
       role: "Founder, CryptoCraft",
-      feedback: "He delivered our DApp on time with flawless execution. Truly a Web3 innovator!",
+      feedback:
+        "He delivered our DApp on time with flawless execution. Truly a Web3 innovator!",
     },
     {
-      name: "Sophia Lee", 
+      name: "Sophia Lee",
       role: "CTO, FinChain",
-      feedback: "The professionalism and quality Aaditya brings are exceptional. Highly recommend for blockchain projects.",
+      feedback:
+        "The professionalism and quality Aaditya brings are exceptional. Highly recommend for blockchain projects.",
     },
     {
       name: "Liam Smith",
       role: "Product Manager, DeFiX",
-      feedback: "His deep understanding of DeFi protocols helped us scale our platform efficiently.",
+      feedback:
+        "His deep understanding of DeFi protocols helped us scale our platform efficiently.",
     },
   ];
 
   // Typewriter Effect
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      const currentText = texts[currentTextIndex];
+    const timeout = setTimeout(
+      () => {
+        const currentText = texts[currentTextIndex];
 
-      if (isDeleting) {
-        setTypewriterText(currentText.substring(0, typewriterIndex - 1));
-        setTypewriterIndex((prev) => prev - 1);
-      } else {
-        setTypewriterText(currentText.substring(0, typewriterIndex + 1));
-        setTypewriterIndex((prev) => prev + 1);
-      }
+        if (isDeleting) {
+          setTypewriterText(currentText.substring(0, typewriterIndex - 1));
+          setTypewriterIndex((prev) => prev - 1);
+        } else {
+          setTypewriterText(currentText.substring(0, typewriterIndex + 1));
+          setTypewriterIndex((prev) => prev + 1);
+        }
 
-      if (!isDeleting && typewriterIndex === currentText.length) {
-        setTimeout(() => setIsDeleting(true), 2000);
-      } else if (isDeleting && typewriterIndex === 0) {
-        setIsDeleting(false);
-        setCurrentTextIndex((prev) => (prev + 1) % texts.length);
-      }
-    }, isDeleting ? 50 : 100);
+        if (!isDeleting && typewriterIndex === currentText.length) {
+          setTimeout(() => setIsDeleting(true), 2000);
+        } else if (isDeleting && typewriterIndex === 0) {
+          setIsDeleting(false);
+          setCurrentTextIndex((prev) => (prev + 1) % texts.length);
+        }
+      },
+      isDeleting ? 50 : 100
+    );
 
     return () => clearTimeout(timeout);
   }, [typewriterText, typewriterIndex, isDeleting, currentTextIndex, texts]);
@@ -155,8 +187,8 @@ const Home = ({ styles }) => {
       <div style={styles.hero} className="hero">
         <div style={styles.textSection} className="text-section">
           <h1 style={styles.heroHeading}>
-            BUILDING THE <br />{" "}
-            <span style={styles.futurespan}>FUTURE </span>OF <br /> BLOCKCHAIN
+            BUILDING THE <br /> <span style={styles.futurespan}>FUTURE </span>OF{" "}
+            <br /> BLOCKCHAIN
           </h1>
           <p style={styles.heroText}>
             A passionate blockchain developer creating <br />
@@ -170,7 +202,11 @@ const Home = ({ styles }) => {
           </p>
           <button
             style={styles.heroButton}
-            onClick={() => document.getElementById("projects").scrollIntoView({ behavior: "smooth" })}
+            onClick={() =>
+              document
+                .getElementById("projects")
+                .scrollIntoView({ behavior: "smooth" })
+            }
           >
             EXPLORE MY WORK
           </button>
@@ -180,6 +216,7 @@ const Home = ({ styles }) => {
           <AnimatedReveal
             imageSrc={ProfileImage}
             containerStyle={styles.profileImageContainer}
+            isProfileImage={true}
           />
         </div>
       </div>
@@ -208,7 +245,9 @@ const Home = ({ styles }) => {
               <p style={styles.projectDescription}>{project.description}</p>
               <div style={styles.techStack}>
                 {project.tech.map((t, i) => (
-                  <span key={i} style={styles.techTag}>{t}</span>
+                  <span key={i} style={styles.techTag}>
+                    {t}
+                  </span>
                 ))}
               </div>
               <a href={project.link} target="_blank" rel="noreferrer">
@@ -240,12 +279,16 @@ const Home = ({ styles }) => {
 const AboutPage = ({ styles }) => {
   const [contentVisible, setContentVisible] = useState(false);
   const [skillsAnimated, setSkillsAnimated] = useState(false);
+  const [greetingText, setGreetingText] = useState("");
+  const [greetingComplete, setGreetingComplete] = useState(false);
 
   const skillData = [
     { title: "Blockchain Dev", percentage: 80, icon: Zap },
     { title: "Smart Contracts", percentage: 95, icon: Shield },
     { title: "Security Learning", percentage: 70, icon: Lock },
   ];
+
+  const fullGreeting = "Hi, I am Aaditya Mishra";
 
   useEffect(() => {
     const timer1 = setTimeout(() => setContentVisible(true), 300);
@@ -256,6 +299,18 @@ const AboutPage = ({ styles }) => {
       clearTimeout(timer2);
     };
   }, []);
+
+  // Typewriter effect for greeting
+  useEffect(() => {
+    if (greetingText.length < fullGreeting.length) {
+      const timeout = setTimeout(() => {
+        setGreetingText(fullGreeting.slice(0, greetingText.length + 1));
+      }, 100);
+      return () => clearTimeout(timeout);
+    } else {
+      setGreetingComplete(true);
+    }
+  }, [greetingText]);
 
   const SkillBar = ({ title, percentage, icon: Icon }) => (
     <div style={aboutStyles.skillBarContainer}>
@@ -283,13 +338,25 @@ const AboutPage = ({ styles }) => {
       <section style={aboutStyles.aboutSection} className="about-section">
         {/* LEFT SIDE: Interactive Image */}
         <div style={aboutStyles.aboutLeft} className="about-left">
-          <AnimatedReveal
-            imageSrc={AboutImage}
-            containerStyle={aboutStyles.scratchContainer}
-            isAboutImage={true}
-          />
+          <div style={aboutStyles.imageWithGreeting}>
+            <AnimatedReveal
+              imageSrc={AboutImage}
+              containerStyle={aboutStyles.scratchContainer}
+              isAboutImage={true}
+            />
+            <div style={aboutStyles.greetingContainer} className="greeting-container">
+              <h2 style={aboutStyles.greetingText}>
+                {greetingText}
+                {!greetingComplete && <span style={aboutStyles.cursor}>|</span>}
+              </h2>
+            </div>
+             <div style={aboutStyles.skillSection}>
+            {skillData.map((skill, index) => (
+              <SkillBar key={index} {...skill} />
+            ))}
+          </div>
+          </div>
         </div>
-        
 
         {/* RIGHT SIDE: Content */}
         <div
@@ -321,40 +388,58 @@ const AboutPage = ({ styles }) => {
               Smart Contract Expert
             </span>
             <span style={aboutStyles.badge} className="pulse-badge">
-              Rust Learner
+              Auditing 
+            </span>
+            <span style={aboutStyles.badge} className="pulse-badge">
+              Foundry Testing
+            </span>
+            <span style={aboutStyles.badge} className="pulse-badge">
+              Ethereum
+            </span>
+            <span style={aboutStyles.badge} className="pulse-badge">
+              Solidity
+            </span>
+            <span style={aboutStyles.badge} className="pulse-badge">
+              ERC20
             </span>
             <span style={aboutStyles.badge} className="pulse-badge">
               ZK Proofs
             </span>
+            <span style={aboutStyles.badge} className="pulse-badge">
+              NFT
+            </span>
+            <span style={aboutStyles.badge} className="pulse-badge">
+              Wallets
+            </span>
+            
+
           </div>
 
           {/* Skill Bars */}
-          <div style={aboutStyles.skillSection}>
-            {skillData.map((skill, index) => (
-              <SkillBar key={index} {...skill} />
-            ))}
-          </div>
+         
         </div>
       </section>
 
       {/* HIRE ME SECTION - FULL WIDTH */}
       <div style={aboutStyles.hireMeSection} className="hire-me-section">
-        <h2 style={aboutStyles.hireMeHeading} className="hire-me-heading">Why You Should Hire Me</h2>
+        <h2 style={aboutStyles.hireMeHeading} className="hire-me-heading">
+          Why You Should Hire Me
+        </h2>
 
         <p style={aboutStyles.hireMeText} className="hire-me-text">
           I am a dedicated blockchain developer who thrives on creating secure
           and efficient decentralized solutions. My experience with smart
-          contracts, Rust, and zero-knowledge proofs allows me to tackle
-          complex problems while keeping scalability and security in focus. I
-          constantly strive to learn and implement innovative technologies
-          that can make a meaningful impact.
+          contracts, Rust, and zero-knowledge proofs allows me to tackle complex
+          problems while keeping scalability and security in focus. I constantly
+          strive to learn and implement innovative technologies that can make a
+          meaningful impact.
         </p>
 
         <p style={aboutStyles.hireMeText} className="hire-me-text">
           Beyond technical expertise, I bring creativity, adaptability, and a
           collaborative mindset to every project. I take ownership of my work
-          and aim to exceed expectations. By hiring me, you gain a developer
-          who is passionate, results-driven, and committed to building robust,
+          and aim to exceed expectations. By hiring me, you gain a developer who
+          is passionate, results-driven, and committed to building robust,
           future-ready blockchain applications.
         </p>
       </div>
@@ -364,44 +449,44 @@ const AboutPage = ({ styles }) => {
 
 // Main Portfolio Router Component
 const Portfolio = () => {
-  const [currentPage, setCurrentPage] = useState('home');
+  const [currentPage, setCurrentPage] = useState("home");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     // Handle hash changes
     const handleHashChange = () => {
       const hash = window.location.hash.substring(1);
-      if (hash === 'about') {
-        setCurrentPage('about');
+      if (hash === "about") {
+        setCurrentPage("about");
       } else {
-        setCurrentPage('home');
+        setCurrentPage("home");
       }
     };
 
     // Listen for hash changes
-    window.addEventListener('hashchange', handleHashChange);
-    
+    window.addEventListener("hashchange", handleHashChange);
+
     // Initial check
     handleHashChange();
 
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
   const handleNavClick = (page) => {
     setMobileMenuOpen(false);
-    if (page === 'about') {
-      window.location.hash = '#about';
-    } else if (page === 'home') {
-      window.location.hash = '#home';
+    if (page === "about") {
+      window.location.hash = "#about";
+    } else if (page === "home") {
+      window.location.hash = "#home";
     } else {
       // For services and projects, scroll to section on home page
-      if (currentPage !== 'home') {
-        window.location.hash = '#home';
+      if (currentPage !== "home") {
+        window.location.hash = "#home";
         setTimeout(() => {
-          document.getElementById(page)?.scrollIntoView({ behavior: 'smooth' });
+          document.getElementById(page)?.scrollIntoView({ behavior: "smooth" });
         }, 100);
       } else {
-        document.getElementById(page)?.scrollIntoView({ behavior: 'smooth' });
+        document.getElementById(page)?.scrollIntoView({ behavior: "smooth" });
       }
     }
   };
@@ -449,6 +534,11 @@ const Portfolio = () => {
             }
           }
           
+          @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+          }
+          
           /* Tablet and smaller desktop */
           @media (max-width: 1200px) {
             .hero { 
@@ -483,6 +573,12 @@ const Portfolio = () => {
               order: 1;
               margin-bottom: 2rem;
               margin-top: 2rem !important;
+            }
+            .greeting-container {
+              margin-top: 1.5rem !important;
+            }
+            .greeting-container h2 {
+              font-size: 1.8rem !important;
             }
             .about-right {
               order: 2;
@@ -526,6 +622,12 @@ const Portfolio = () => {
               margin-bottom: 1.5rem;
               margin-top: 3rem !important;
             }
+            .greeting-container {
+              margin-top: 1.2rem !important;
+            }
+            .greeting-container h2 {
+              font-size: 1.5rem !important;
+            }
             .about-heading {
               font-size: 2.5rem !important;
             }
@@ -560,6 +662,12 @@ const Portfolio = () => {
             .about-left {
               margin-top: 4rem !important;
             }
+            .greeting-container {
+              margin-top: 1rem !important;
+            }
+            .greeting-container h2 {
+              font-size: 1.3rem !important;
+            }
             .about-heading {
               font-size: 2rem !important;
             }
@@ -592,6 +700,13 @@ const Portfolio = () => {
             }
             .about-left {
               margin-top: 5rem !important;
+            }
+            .greeting-container {
+              margin-top: 0.8rem !important;
+              padding: 0 0.5rem !important;
+            }
+            .greeting-container h2 {
+              font-size: 1.1rem !important;
             }
             .about-heading {
               font-size: 1.8rem !important;
@@ -683,59 +798,99 @@ const Portfolio = () => {
           }
         `}
       </style>
-      
+
       <div style={styles.container}>
         {/* Social Sidebar */}
         <div style={styles.socialSidebar} className="social-sidebar">
-          <a target="_blank" rel="noreferrer" href="mailto:etherbraider@gmail.com" style={styles.socialLink}>
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="mailto:etherbraider@gmail.com"
+            style={styles.socialLink}
+          >
             <Mail size={20} />
           </a>
-          <a target="_blank" rel="noreferrer" href="https://x.com/AadiM794" style={styles.socialLink}>
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://x.com/AadiM794"
+            style={styles.socialLink}
+          >
             <Twitter size={20} />
           </a>
-          <a target="_blank" rel="noreferrer" href="https://github.com/AadityaMishra794" style={styles.socialLink}>
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://github.com/AadityaMishra794"
+            style={styles.socialLink}
+          >
             <Github size={20} />
           </a>
-          <a target="_blank" rel="noreferrer" href="https://linkedin.com/in/aaditya-mishra-5b6b2b255/" style={styles.socialLink}>
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://linkedin.com/in/aaditya-mishra-5b6b2b255/"
+            style={styles.socialLink}
+          >
             <Linkedin size={20} />
           </a>
         </div>
 
         {/* Navbar */}
         <nav style={styles.navbar} className="navbar">
-          <a href="#home" onClick={() => handleNavClick('home')}>
+          <a href="#home" onClick={() => handleNavClick("home")}>
             <h1 style={styles.logo}>
               Ether<span style={styles.logoSpan}>Braider</span>
             </h1>
           </a>
-          
+
           <ul style={styles.navLinks} className="nav-links">
             <li>
-              <a href="#services" style={styles.navLink} onClick={(e) => { e.preventDefault(); handleNavClick('services'); }}>
+              <a
+                href="#services"
+                style={styles.navLink}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick("services");
+                }}
+              >
                 Services
               </a>
             </li>
             <li>
-              <a href="#projects" style={styles.navLink} onClick={(e) => { e.preventDefault(); handleNavClick('projects'); }}>
+              <a
+                href="#projects"
+                style={styles.navLink}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick("projects");
+                }}
+              >
                 Projects
               </a>
             </li>
             <li>
-              <a href="#about" style={styles.navLink} onClick={(e) => { e.preventDefault(); handleNavClick('about'); }}>
+              <a
+                href="#about"
+                style={styles.navLink}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick("about");
+                }}
+              >
                 About
               </a>
             </li>
           </ul>
 
-          <button 
+          <button
             className="mobile-menu-button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             ☰
           </button>
         </nav>
-
-        {/* Mobile Menu */}
+{/* Mobile Menu */}
         <div className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
           <ul style={{ listStyle: 'none', padding: '2rem', margin: 0 }}>
             <li style={{ marginBottom: '1rem' }}>
@@ -814,7 +969,7 @@ const aboutStyles = {
     justifyContent: "center",
     alignItems: "flex-start", // aligns image to top of container
     position: "relative",
-    marginTop: "-6rem", // shift image slightly up
+    marginTop:"6rem",
   },
   aboutRight: {
     flex: 1,
@@ -855,7 +1010,7 @@ const aboutStyles = {
     display: "flex",
     flexWrap: "wrap",
     gap: "1rem",
-    marginBottom: "3rem",
+    marginTop: "2rem",
   },
   badge: {
     background: "rgba(255, 26, 26, 0.1)",
@@ -870,6 +1025,7 @@ const aboutStyles = {
     transition: "all 0.3s ease",
   },
   skillSection: {
+    marginTop:"2rem",
     display: "flex",
     flexDirection: "column",
     gap: "1.5rem",
