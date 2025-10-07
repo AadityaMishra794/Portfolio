@@ -259,7 +259,7 @@ const Home = ({ styles }) => {
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" style={styles.section} className="section">
+      {/* <section id="testimonials" style={styles.section} className="section">
         <h2 style={styles.sectionHeading}>Testimonials</h2>
         <div style={styles.testimonialGrid} className="testimonial-grid">
           {testimonials.map((t, index) => (
@@ -270,7 +270,7 @@ const Home = ({ styles }) => {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
     </>
   );
 };
