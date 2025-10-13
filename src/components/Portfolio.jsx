@@ -117,14 +117,14 @@ const Home = ({ styles }) => {
       tech: ["Solidity", "react", "truffle", "sepolia test network network"],
       link: "https://crowdfundhive.netlify.app/",
     },
-    {
-      id: 4,
-      title: "Cross-Chain Bridge",
-      description:
-        "Secure asset bridge connecting Ethereum, Binance Smart Chain, and Polygon networks.",
-      tech: ["Solidity", "Node.js", "Web3", "Chainlink"],
-      link: "https://github.com/AadityaMishra794/polygonscan-clone-frontend-REACT.JS-",
-    },
+    // {
+    //   id: 4,
+    //   title: "Cross-Chain Bridge",
+    //   description:
+    //     "Secure asset bridge connecting Ethereum, Binance Smart Chain, and Polygon networks.",
+    //   tech: ["Solidity", "Node.js", "Web3", "Chainlink"],
+    //   link: "https://github.com/AadityaMishra794/polygonscan-clone-frontend-REACT.JS-",
+    // },
   ];
 
   const testimonials = [
