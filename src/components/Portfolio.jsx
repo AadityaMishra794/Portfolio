@@ -577,8 +577,10 @@ const Portfolio = () => {
     setMobileMenuOpen(false);
     if (page === "about") {
       window.location.hash = "#about";
+      window.scrollTo(0,0)
     } else if (page === "home") {
       window.location.hash = "#home";
+      window.scrollTo(0,0)
     } else {
       // For services and projects, scroll to section on home page
       if (currentPage !== "home") {
