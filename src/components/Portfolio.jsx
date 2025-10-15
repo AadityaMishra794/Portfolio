@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import {
   Mail,
@@ -12,6 +11,7 @@ import {
 } from "lucide-react";
 import ProfileImage from "../assets/Profile.png";
 import AboutImage from "../assets/About.png";
+import RESUME from "../assets/RESUME.pdf";
 
 // Animated Reveal Effect Component
 const AnimatedReveal = ({ imageSrc, containerStyle, isAboutImage = false, isProfileImage = false }) => {
@@ -69,13 +69,13 @@ const Home = ({ styles }) => {
       title: "Smart Contract Development",
       description:
         "Secure and efficient smart contracts built on Ethereum, Solana and ICP.",
-      icon: "⚡",
+      icon: "📃",
     },
     {
       title: "DApp Solutions",
       description:
         "Fully functional decentralized applications tailored to your needs.",
-      icon: "🔗",
+      icon: "🌐",
     },
     {
       title: "smart contract auditor",
@@ -411,12 +411,7 @@ const AboutPage = ({ styles }) => {
             <span style={aboutStyles.badge} className="pulse-badge">
               Wallets
             </span>
-            
-
           </div>
-
-          {/* Skill Bars */}
-         
         </div>
       </section>
 
@@ -442,6 +437,112 @@ const AboutPage = ({ styles }) => {
           is passionate, results-driven, and committed to building robust,
           future-ready blockchain applications.
         </p>
+      </div>
+
+      {/* MY AIMS & TARGETS SECTION */}
+      <div style={aboutStyles.aimsSection} className="aims-section">
+        <h2 style={aboutStyles.aimsHeading} className="aims-heading">
+          MY AIMS & TARGETS
+        </h2>
+        <p style={aboutStyles.aimsSubtitle} className="aims-subtitle">
+          The roadmap to excellence in Web3 development
+        </p>
+
+        <div style={aboutStyles.aimsTimeline} className="aims-timeline">
+          {/* Goal 1 */}
+          <div style={aboutStyles.timelineItem} className="timeline-item">
+            <div style={aboutStyles.timelineNumber}>01</div>
+            <div style={aboutStyles.timelineContent}>
+              <h3 style={aboutStyles.goalTitle}>Master Web3 & Blockchain</h3>
+              <p style={aboutStyles.goalDescription}>
+                Become a recognized expert in Web3 technologies, mastering advanced concepts in Solidity, Rust, 
+                zero-knowledge proofs, and Layer 2 scaling solutions. Deep dive into protocol design and 
+                decentralized architecture patterns.
+              </p>
+              <div style={aboutStyles.goalTags}>
+                <span style={aboutStyles.goalTag}>Solidity Expert</span>
+                <span style={aboutStyles.goalTag}>Rust Development</span>
+                <span style={aboutStyles.goalTag}>ZK Proofs</span>
+              </div>
+            </div>
+            <div style={aboutStyles.timelineConnector}></div>
+          </div>
+
+          {/* Goal 2 */}
+          <div style={aboutStyles.timelineItem} className="timeline-item">
+            <div style={aboutStyles.timelineNumber}>02</div>
+            <div style={aboutStyles.timelineContent}>
+              <h3 style={aboutStyles.goalTitle}>Smart Contract Security Expert</h3>
+              <p style={aboutStyles.goalDescription}>
+                Achieve mastery in smart contract auditing and security practices. Identify critical vulnerabilities, 
+                implement best practices, and become a trusted security auditor in the blockchain space. 
+                Contribute to making Web3 safer for everyone.
+              </p>
+              <div style={aboutStyles.goalTags}>
+                <span style={aboutStyles.goalTag}>Security Auditing</span>
+                <span style={aboutStyles.goalTag}>Vulnerability Analysis</span>
+                <span style={aboutStyles.goalTag}>Best Practices</span>
+              </div>
+            </div>
+            <div style={aboutStyles.timelineConnector}></div>
+          </div>
+
+          {/* Goal 3 */}
+          <div style={aboutStyles.timelineItem} className="timeline-item">
+            <div style={aboutStyles.timelineNumber}>03</div>
+            <div style={aboutStyles.timelineContent}>
+              <h3 style={aboutStyles.goalTitle}>Win Competitive Audits</h3>
+              <p style={aboutStyles.goalDescription}>
+                Participate and excel in competitive audit contests on platforms like Code4rena and Sherlock. 
+                Build reputation through quality findings, demonstrate expertise, and compete with top security 
+                researchers globally.
+              </p>
+              <div style={aboutStyles.goalTags}>
+                <span style={aboutStyles.goalTag}>Code4rena</span>
+                <span style={aboutStyles.goalTag}>Bug Bounties</span>
+                <span style={aboutStyles.goalTag}>Competitive Audits</span>
+              </div>
+            </div>
+            <div style={aboutStyles.timelineConnector}></div>
+          </div>
+
+          {/* Goal 4 */}
+          <div style={aboutStyles.timelineItem} className="timeline-item">
+            <div style={aboutStyles.timelineNumber}>04</div>
+            <div style={aboutStyles.timelineContent}>
+              <h3 style={aboutStyles.goalTitle}>Deliver Quality Audits</h3>
+              <p style={aboutStyles.goalDescription}>
+                Provide comprehensive, professional security audits for clients worldwide. Build long-term 
+                relationships through exceptional service, thorough analysis, and clear communication. 
+                Help projects launch securely and maintain the highest standards.
+              </p>
+              <div style={aboutStyles.goalTags}>
+                <span style={aboutStyles.goalTag}>Client Success</span>
+                <span style={aboutStyles.goalTag}>Professional Reports</span>
+                <span style={aboutStyles.goalTag}>Quality Assurance</span>
+              </div>
+            </div>
+            <div style={aboutStyles.timelineConnector}></div>
+          </div>
+
+          {/* Goal 5 */}
+          <div style={aboutStyles.timelineItem} className="timeline-item timeline-item-last">
+            <div style={aboutStyles.timelineNumber}>05</div>
+            <div style={aboutStyles.timelineContent}>
+              <h3 style={aboutStyles.goalTitle}>Build & Innovate</h3>
+              <p style={aboutStyles.goalDescription}>
+                Create innovative DeFi protocols, NFT platforms, and Web3 infrastructure. Contribute to open-source 
+                projects, mentor upcoming developers, and push the boundaries of what's possible in decentralized 
+                technology. Leave a lasting impact on the blockchain ecosystem.
+              </p>
+              <div style={aboutStyles.goalTags}>
+                <span style={aboutStyles.goalTag}>Innovation</span>
+                <span style={aboutStyles.goalTag}>Open Source</span>
+                <span style={aboutStyles.goalTag}>Community Impact</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
@@ -538,6 +639,43 @@ const Portfolio = () => {
             0%, 50% { opacity: 1; }
             51%, 100% { opacity: 0; }
           }
+
+          @keyframes slideInLeft {
+            from {
+              opacity: 0;
+              transform: translateX(-50px);
+            }
+            to {
+              opacity: 1;
+              transform: translateX(0);
+            }
+          }
+
+          .timeline-item {
+            animation: slideInLeft 0.8s ease forwards;
+          }
+
+          .timeline-item:nth-child(1) {
+            animation-delay: 0.2s;
+          }
+          .timeline-item:nth-child(2) {
+            animation-delay: 0.4s;
+          }
+          .timeline-item:nth-child(3) {
+            animation-delay: 0.6s;
+          }
+          .timeline-item:nth-child(4) {
+            animation-delay: 0.8s;
+          }
+          .timeline-item:nth-child(5) {
+            animation-delay: 1s;
+          }
+
+          .timeline-content:hover {
+            transform: translateX(10px);
+            border-color: rgba(255, 26, 26, 0.5);
+            box-shadow: 0 10px 30px rgba(255, 26, 26, 0.2);
+          }
           
           /* Tablet and smaller desktop */
           @media (max-width: 1200px) {
@@ -556,6 +694,9 @@ const Portfolio = () => {
             }
             .hire-me-heading {
               font-size: 2.8rem !important;
+            }
+            .aims-section {
+              padding: 4rem 3rem !important;
             }
           }
           
@@ -588,6 +729,12 @@ const Portfolio = () => {
             }
             .hire-me-heading {
               font-size: 2.6rem !important;
+            }
+            .aims-section {
+              padding: 3.5rem 2.5rem !important;
+            }
+            .timeline-number {
+              font-size: 2.5rem !important;
             }
           }
           
@@ -648,6 +795,27 @@ const Portfolio = () => {
             .hire-me-text {
               font-size: 1.05rem !important;
             }
+            .aims-section {
+              padding: 3rem 2rem !important;
+              margin-top: 2rem !important;
+            }
+            .aims-heading {
+              font-size: 2.4rem !important;
+            }
+            .aims-timeline {
+              padding: 0 1rem;
+            }
+            .timeline-number {
+              font-size: 2rem !important;
+              min-width: 60px !important;
+            }
+            .timeline-content {
+              margin-left: 1rem !important;
+              padding: 1rem !important;
+            }
+            .timeline-connector {
+              left: 30px !important;
+            }
           }
           
           @media (max-width: 480px) {
@@ -685,6 +853,32 @@ const Portfolio = () => {
             }
             .hire-me-text {
               font-size: 1rem !important;
+            }
+            .aims-section {
+              padding: 2.5rem 1rem !important;
+            }
+            .aims-heading {
+              font-size: 2rem !important;
+            }
+            .aims-subtitle {
+              font-size: 1rem !important;
+            }
+            .timeline-number {
+              font-size: 1.5rem !important;
+              min-width: 50px !important;
+            }
+            .timeline-content {
+              margin-left: 0.8rem !important;
+              padding: 0.8rem !important;
+            }
+            .timeline-connector {
+              left: 25px !important;
+            }
+            .goal-title {
+              font-size: 1.1rem !important;
+            }
+            .goal-description {
+              font-size: 0.85rem !important;
             }
           }
           
@@ -727,6 +921,22 @@ const Portfolio = () => {
             .hire-me-text {
               font-size: 0.95rem !important;
             }
+            .aims-section {
+              padding: 2rem 0.8rem !important;
+            }
+            .aims-heading {
+              font-size: 1.8rem !important;
+            }
+            .aims-subtitle {
+              font-size: 0.9rem !important;
+            }
+            .timeline-item {
+              margin-bottom: 2.5rem !important;
+            }
+            .goal-tag {
+              font-size: 0.7rem !important;
+              padding: 0.3rem 0.7rem !important;
+            }
           }
           
           @media (min-width: 1200px) {
@@ -746,6 +956,9 @@ const Portfolio = () => {
             .hire-me-section {
               padding: "5rem 6rem" !important;
             }
+            .aims-section {
+              padding: "5rem 6rem" !important;
+            }
           }
           
           @media (min-width: 1400px) {
@@ -760,6 +973,9 @@ const Portfolio = () => {
               padding: "10rem 6rem 8rem 6rem" !important;
             }
             .hire-me-section {
+              padding: "6rem 8rem" !important;
+            }
+            .aims-section {
               padding: "6rem 8rem" !important;
             }
           }
@@ -847,6 +1063,15 @@ const Portfolio = () => {
           <ul style={styles.navLinks} className="nav-links">
             <li>
               <a
+                href={RESUME}
+                download="AADITYA MISHRA RESUME.pdf"
+                style={styles.resumeButton}
+              >
+                Resume
+              </a>
+            </li>
+            <li>
+              <a
                 href="#services"
                 style={styles.navLink}
                 onClick={(e) => {
@@ -890,9 +1115,20 @@ const Portfolio = () => {
             ☰
           </button>
         </nav>
-{/* Mobile Menu */}
+
+        {/* Mobile Menu */}
         <div className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
           <ul style={{ listStyle: 'none', padding: '2rem', margin: 0 }}>
+            <li style={{ marginBottom: '1rem' }}>
+              <a
+                href="/resume.pdf"
+                download="Aaditya_Mishra_Resume.pdf"
+                style={styles.resumeButton}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Resume
+              </a>
+            </li>
             <li style={{ marginBottom: '1rem' }}>
               <a href="#services" style={styles.navLink} onClick={(e) => { e.preventDefault(); handleNavClick('services'); }}>
                 Services
@@ -959,7 +1195,7 @@ const aboutStyles = {
     boxSizing: "border-box",
     gap: "4rem",
     minHeight: "calc(100vh - 80px)",
-    flexWrap: "wrap", // responsive
+    flexWrap: "wrap",
   },
   aboutLeft: {
     flex: 1,
@@ -967,7 +1203,7 @@ const aboutStyles = {
     minHeight: "400px",
     display: "flex",
     justifyContent: "center",
-    alignItems: "flex-start", // aligns image to top of container
+    alignItems: "flex-start",
     position: "relative",
     marginTop:"6rem",
   },
@@ -976,7 +1212,7 @@ const aboutStyles = {
     maxWidth: "55%",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "flex-start", // aligns text from top
+    justifyContent: "flex-start",
   },
   scratchContainer: {
     position: "relative",
@@ -985,7 +1221,20 @@ const aboutStyles = {
     aspectRatio: "1 / 1",
     borderRadius: "10px",
     overflow: "hidden",
-    marginTop: "-6rem", // image aligned slightly up
+    marginTop: "-6rem",
+  },
+  greetingContainer: {
+    marginTop: "2rem",
+    textAlign: "center",
+  },
+  greetingText: {
+    fontSize: "2rem",
+    fontWeight: 700,
+    color: "#ff1a1a",
+    fontFamily: "'Orbitron', sans-serif",
+  },
+  cursor: {
+    animation: "blink 1s infinite",
   },
   aboutHeading: {
     fontSize: "3rem",
@@ -1067,8 +1316,6 @@ const aboutStyles = {
     transition: "width 2s ease-out",
     boxShadow: "0 0 10px #ff1a1a",
   },
-
-  // ---------------- HIRE ME SECTION ----------------
   hireMeSection: {
     width: "100%",
     marginTop: "4rem",
@@ -1106,25 +1353,100 @@ const aboutStyles = {
     position: "relative",
     zIndex: 2,
   },
-  // Responsive classes for hire me section
-  hireMeResponsive: {
-    "@media (max-width: 768px)": {
-      padding: "3rem 2rem",
-      marginTop: "3rem",
-    },
-    "@media (max-width: 480px)": {
-      padding: "2.5rem 1rem",
-      marginTop: "2rem",
-    },
-    "@media (max-width: 360px)": {
-      padding: "2rem 0.8rem",
-      marginTop: "1.5rem",
-    },
+  aimsSection: {
+    width: "100%",
+    marginTop: "4rem",
+    padding: "5rem 4rem",
+    background: "linear-gradient(135deg, rgba(31, 31, 31, 0.3) 0%, rgba(0, 0, 0, 0.6) 100%)",
+    boxSizing: "border-box",
+  },
+  aimsHeading: {
+    fontSize: "3rem",
+    fontWeight: 800,
+    color: "#ff1a1a",
+    textAlign: "center",
+    marginBottom: "1rem",
+    fontFamily: "'Orbitron', sans-serif",
+    textTransform: "uppercase",
+    letterSpacing: "2px",
+  },
+  aimsSubtitle: {
+    fontSize: "1.2rem",
+    color: "#aaa",
+    textAlign: "center",
+    marginBottom: "4rem",
+    fontFamily: "'Orbitron', sans-serif",
+  },
+  aimsTimeline: {
+    maxWidth: "900px",
+    margin: "0 auto",
+    position: "relative",
+  },
+  timelineItem: {
+    display: "flex",
+    alignItems: "flex-start",
+    marginBottom: "4rem",
+    position: "relative",
+    opacity: 0,
+  },
+  timelineNumber: {
+    fontSize: "3rem",
+    fontWeight: 800,
+    color: "#ff1a1a",
+    fontFamily: "'Orbitron', sans-serif",
+    minWidth: "80px",
+    textAlign: "center",
+    position: "relative",
+    zIndex: 2,
+    textShadow: "0 0 20px rgba(255, 26, 26, 0.5)",
+  },
+  timelineContent: {
+    flex: 1,
+    marginLeft: "2rem",
+    padding: "1.5rem",
+    background: "rgba(31, 31, 31, 0.6)",
+    borderRadius: "15px",
+    border: "1px solid rgba(255, 26, 26, 0.2)",
+    backdropFilter: "blur(10px)",
+    transition: "all 0.3s ease",
+  },
+  timelineConnector: {
+    position: "absolute",
+    left: "40px",
+    top: "60px",
+    width: "2px",
+    height: "calc(100% + 20px)",
+    background: "linear-gradient(180deg, #ff1a1a 0%, rgba(255, 26, 26, 0.2) 100%)",
+    zIndex: 1,
+  },
+  goalTitle: {
+    fontSize: "1.5rem",
+    color: "#fff",
+    marginBottom: "1rem",
+    fontFamily: "'Orbitron', sans-serif",
+    fontWeight: 700,
+  },
+  goalDescription: {
+    fontSize: "1rem",
+    color: "#ccc",
+    lineHeight: 1.7,
+    marginBottom: "1.5rem",
+  },
+  goalTags: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "0.5rem",
+  },
+  goalTag: {
+    background: "rgba(255, 26, 26, 0.1)",
+    color: "#ff1a1a",
+    padding: "0.4rem 1rem",
+    borderRadius: "20px",
+    fontSize: "0.85rem",
+    fontWeight: "bold",
+    border: "1px solid rgba(255, 26, 26, 0.3)",
   },
 };
-
-  // Hire Me Section Styles
-
 
 // Main Portfolio Styles
 const styles = {
@@ -1172,6 +1494,7 @@ const styles = {
     gap: "2rem",
     margin: 0,
     padding: 0,
+    alignItems: "center",
   },
   navLink: {
     textDecoration: "none",
@@ -1180,6 +1503,19 @@ const styles = {
     letterSpacing: "1px",
     transition: "color 0.3s ease",
     fontFamily: "'orbitron', sans-serif",
+  },
+  resumeButton: {
+    textDecoration: "none",
+    color: "#000",
+    background: "#fff",
+    fontSize: "0.9rem",
+    letterSpacing: "1px",
+    padding: "0.6rem 1.5rem",
+    borderRadius: "25px",
+    fontFamily: "'orbitron', sans-serif",
+    fontWeight: 700,
+    transition: "all 0.3s ease",
+    display: "inline-block",
   },
   socialSidebar: {
     position: "fixed",
@@ -1280,13 +1616,6 @@ const styles = {
     fontSize: "2rem",
     color: "#ff1a1a",
     marginBottom: "2rem",
-    fontFamily: "'Orbitron', sans-serif",
-  },
-  sectionText: {
-    fontSize: "1rem",
-    lineHeight: 1.6,
-    color: "#ff1a1a",
-    marginBottom: "1.5rem",
     fontFamily: "'Orbitron', sans-serif",
   },
   servicesGrid: {
