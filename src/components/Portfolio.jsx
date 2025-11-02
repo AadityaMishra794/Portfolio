@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Mail,
   Github,
@@ -7,14 +7,104 @@ import {
   Zap,
   Lock,
   Shield,
-  ArrowRight,
+  Box,
+  Hexagon,
+  Square,
 } from "lucide-react";
 import ProfileImage from "../assets/Profile.png";
 import AboutImage from "../assets/About.png";
 import RESUME from "../assets/RESUME.pdf";
 
+// Floating Blockchain Blocks Component
+const FloatingBlockchainBlocks = () => {
+  const [blocks, setBlocks] = useState([]);
+
+  useEffect(() => {
+    const generateBlocks = () => {
+      const newBlocks = [];
+      for (let i = 0; i < 15; i++) {
+        newBlocks.push({
+          id: i,
+          x: Math.random() * 100,
+          y: Math.random() * 100,
+          size: Math.random() * 30 + 20,
+          duration: Math.random() * 1 + 3,
+          delay: Math.random() * 5,
+          rotation: Math.random() * 360,
+          opacity: Math.random() * 0.3 + 0.1,
+          shape: ["box", "hexagon", "square"][Math.floor(Math.random() * 3)],
+        });
+      }
+      setBlocks(newBlocks);
+    };
+
+    generateBlocks();
+  }, []);
+
+  const getIcon = (shape, size) => {
+    const iconProps = {
+      size,
+      strokeWidth: 1.5,
+      style: { filter: "drop-shadow(0 0 8px rgba(255, 26, 26, 0.4))" },
+    };
+
+    switch (shape) {
+      case "box":
+        return <Box {...iconProps} />;
+      case "hexagon":
+        return <Hexagon {...iconProps} />;
+      case "square":
+        return <Square {...iconProps} />;
+      default:
+        return <Box {...iconProps} />;
+    }
+  };
+
+  return (
+    <div style={blockchainStyles.container}>
+      {blocks.map((block) => (
+        <div
+          key={block.id}
+          style={{
+            ...blockchainStyles.block,
+            left: `${block.x}%`,
+            top: `${block.y}%`,
+            animation: `floatBlock ${block.duration}s ease-in-out ${block.delay}s infinite, rotateBlock 5s linear infinite`, // ← CHANGE THIS LINE
+            opacity: block.opacity,
+          }}
+        >
+          {getIcon(block.shape, block.size)}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const blockchainStyles = {
+  container: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    pointerEvents: "none",
+    zIndex: 0,
+    overflow: "hidden",
+  },
+  block: {
+    position: "absolute",
+    color: "#ff1a1a",
+    transform: "translate(-50%, -50%)",
+  },
+};
+
 // Animated Reveal Effect Component
-const AnimatedReveal = ({ imageSrc, containerStyle, isAboutImage = false, isProfileImage = false }) => {
+const AnimatedReveal = ({
+  imageSrc,
+  containerStyle,
+  isAboutImage = false,
+  isProfileImage = false,
+}) => {
   const [isRevealed, setIsRevealed] = useState(false);
 
   useEffect(() => {
@@ -30,11 +120,20 @@ const AnimatedReveal = ({ imageSrc, containerStyle, isAboutImage = false, isProf
       <div style={animatedStyles.imageContainer}>
         <img
           src={imageSrc}
-          alt={isAboutImage ? "Profile Art" : isProfileImage ? "Profile" : "Vector illustration"}
+          alt={
+            isAboutImage
+              ? "Profile Art"
+              : isProfileImage
+              ? "Profile"
+              : "Vector illustration"
+          }
           style={{
             ...animatedStyles.aboutImage,
-            opacity: (isAboutImage || isProfileImage) ? (isRevealed ? 1 : 0) : 1,
-            transition: (isAboutImage || isProfileImage) ? "opacity 3s ease-in-out" : "none",
+            opacity: isAboutImage || isProfileImage ? (isRevealed ? 1 : 0) : 1,
+            transition:
+              isAboutImage || isProfileImage
+                ? "opacity 3s ease-in-out"
+                : "none",
           }}
         />
         <div
@@ -116,41 +215,6 @@ const Home = ({ styles }) => {
         "Decentralized Crowdfunding Platform in which you anyone can create campaign for fund raising and anyone can donate",
       tech: ["Solidity", "react", "truffle", "sepolia test network network"],
       link: "https://crowdfundhive.netlify.app/",
-    },
-    // {
-    //   id: 4,
-    //   title: "Cross-Chain Bridge",
-    //   description:
-    //     "Secure asset bridge connecting Ethereum, Binance Smart Chain, and Polygon networks.",
-    //   tech: ["Solidity", "Node.js", "Web3", "Chainlink"],
-    //   link: "https://github.com/AadityaMishra794/polygonscan-clone-frontend-REACT.JS-",
-    // },
-  ];
-
-  const testimonials = [
-    {
-      name: "Alice Johnson",
-      role: "CEO, Web3 Labs",
-      feedback:
-        "Working with Aaditya was a game-changer. His expertise in blockchain and smart contracts is unmatched!",
-    },
-    {
-      name: "Raj Mehta",
-      role: "Founder, CryptoCraft",
-      feedback:
-        "He delivered our DApp on time with flawless execution. Truly a Web3 innovator!",
-    },
-    {
-      name: "Sophia Lee",
-      role: "CTO, FinChain",
-      feedback:
-        "The professionalism and quality Aaditya brings are exceptional. Highly recommend for blockchain projects.",
-    },
-    {
-      name: "Liam Smith",
-      role: "Product Manager, DeFiX",
-      feedback:
-        "His deep understanding of DeFi protocols helped us scale our platform efficiently.",
     },
   ];
 
@@ -257,20 +321,6 @@ const Home = ({ styles }) => {
           ))}
         </div>
       </section>
-
-      {/* Testimonials Section */}
-      {/* <section id="testimonials" style={styles.section} className="section">
-        <h2 style={styles.sectionHeading}>Testimonials</h2>
-        <div style={styles.testimonialGrid} className="testimonial-grid">
-          {testimonials.map((t, index) => (
-            <div key={index} style={styles.testimonialCard}>
-              <p style={styles.testimonialFeedback}>"{t.feedback}"</p>
-              <h4 style={styles.testimonialName}>{t.name}</h4>
-              <p style={styles.testimonialRole}>{t.role}</p>
-            </div>
-          ))}
-        </div>
-      </section> */}
     </>
   );
 };
@@ -344,17 +394,20 @@ const AboutPage = ({ styles }) => {
               containerStyle={aboutStyles.scratchContainer}
               isAboutImage={true}
             />
-            <div style={aboutStyles.greetingContainer} className="greeting-container">
+            <div
+              style={aboutStyles.greetingContainer}
+              className="greeting-container"
+            >
               <h2 style={aboutStyles.greetingText}>
                 {greetingText}
                 {!greetingComplete && <span style={aboutStyles.cursor}>|</span>}
               </h2>
             </div>
-             <div style={aboutStyles.skillSection}>
-            {skillData.map((skill, index) => (
-              <SkillBar key={index} {...skill} />
-            ))}
-          </div>
+            <div style={aboutStyles.skillSection}>
+              {skillData.map((skill, index) => (
+                <SkillBar key={index} {...skill} />
+              ))}
+            </div>
           </div>
         </div>
 
@@ -388,7 +441,7 @@ const AboutPage = ({ styles }) => {
               Smart Contract Expert
             </span>
             <span style={aboutStyles.badge} className="pulse-badge">
-              Auditing 
+              Auditing
             </span>
             <span style={aboutStyles.badge} className="pulse-badge">
               Foundry Testing
@@ -455,8 +508,9 @@ const AboutPage = ({ styles }) => {
             <div style={aboutStyles.timelineContent}>
               <h3 style={aboutStyles.goalTitle}>Master Web3 & Blockchain</h3>
               <p style={aboutStyles.goalDescription}>
-                Become a recognized expert in Web3 technologies, mastering advanced concepts in Solidity, Rust, 
-                zero-knowledge proofs, and Layer 2 scaling solutions. Deep dive into protocol design and 
+                Become a recognized expert in Web3 technologies, mastering
+                advanced concepts in Solidity, Rust, zero-knowledge proofs, and
+                Layer 2 scaling solutions. Deep dive into protocol design and
                 decentralized architecture patterns.
               </p>
               <div style={aboutStyles.goalTags}>
@@ -472,11 +526,14 @@ const AboutPage = ({ styles }) => {
           <div style={aboutStyles.timelineItem} className="timeline-item">
             <div style={aboutStyles.timelineNumber}>02</div>
             <div style={aboutStyles.timelineContent}>
-              <h3 style={aboutStyles.goalTitle}>Smart Contract Security Expert</h3>
+              <h3 style={aboutStyles.goalTitle}>
+                Smart Contract Security Expert
+              </h3>
               <p style={aboutStyles.goalDescription}>
-                Achieve mastery in smart contract auditing and security practices. Identify critical vulnerabilities, 
-                implement best practices, and become a trusted security auditor in the blockchain space. 
-                Contribute to making Web3 safer for everyone.
+                Achieve mastery in smart contract auditing and security
+                practices. Identify critical vulnerabilities, implement best
+                practices, and become a trusted security auditor in the
+                blockchain space. Contribute to making Web3 safer for everyone.
               </p>
               <div style={aboutStyles.goalTags}>
                 <span style={aboutStyles.goalTag}>Security Auditing</span>
@@ -493,8 +550,9 @@ const AboutPage = ({ styles }) => {
             <div style={aboutStyles.timelineContent}>
               <h3 style={aboutStyles.goalTitle}>Win Competitive Audits</h3>
               <p style={aboutStyles.goalDescription}>
-                Participate and excel in competitive audit contests on platforms like Code4rena and Sherlock. 
-                Build reputation through quality findings, demonstrate expertise, and compete with top security 
+                Participate and excel in competitive audit contests on platforms
+                like Code4rena and Sherlock. Build reputation through quality
+                findings, demonstrate expertise, and compete with top security
                 researchers globally.
               </p>
               <div style={aboutStyles.goalTags}>
@@ -512,9 +570,10 @@ const AboutPage = ({ styles }) => {
             <div style={aboutStyles.timelineContent}>
               <h3 style={aboutStyles.goalTitle}>Deliver Quality Audits</h3>
               <p style={aboutStyles.goalDescription}>
-                Provide comprehensive, professional security audits for clients worldwide. Build long-term 
-                relationships through exceptional service, thorough analysis, and clear communication. 
-                Help projects launch securely and maintain the highest standards.
+                Provide comprehensive, professional security audits for clients
+                worldwide. Build long-term relationships through exceptional
+                service, thorough analysis, and clear communication. Help
+                projects launch securely and maintain the highest standards.
               </p>
               <div style={aboutStyles.goalTags}>
                 <span style={aboutStyles.goalTag}>Client Success</span>
@@ -526,14 +585,19 @@ const AboutPage = ({ styles }) => {
           </div>
 
           {/* Goal 5 */}
-          <div style={aboutStyles.timelineItem} className="timeline-item timeline-item-last">
+          <div
+            style={aboutStyles.timelineItem}
+            className="timeline-item timeline-item-last"
+          >
             <div style={aboutStyles.timelineNumber}>05</div>
             <div style={aboutStyles.timelineContent}>
               <h3 style={aboutStyles.goalTitle}>Build & Innovate</h3>
               <p style={aboutStyles.goalDescription}>
-                Create innovative DeFi protocols, NFT platforms, and Web3 infrastructure. Contribute to open-source 
-                projects, mentor upcoming developers, and push the boundaries of what's possible in decentralized 
-                technology. Leave a lasting impact on the blockchain ecosystem.
+                Create innovative DeFi protocols, NFT platforms, and Web3
+                infrastructure. Contribute to open-source projects, mentor
+                upcoming developers, and push the boundaries of what's possible
+                in decentralized technology. Leave a lasting impact on the
+                blockchain ecosystem.
               </p>
               <div style={aboutStyles.goalTags}>
                 <span style={aboutStyles.goalTag}>Innovation</span>
@@ -577,10 +641,10 @@ const Portfolio = () => {
     setMobileMenuOpen(false);
     if (page === "about") {
       window.location.hash = "#about";
-      window.scrollTo(0,0)
+      window.scrollTo(0, 0);
     } else if (page === "home") {
       window.location.hash = "#home";
-      window.scrollTo(0,0)
+      window.scrollTo(0, 0);
     } else {
       // For services and projects, scroll to section on home page
       if (currentPage !== "home") {
@@ -596,8 +660,27 @@ const Portfolio = () => {
 
   return (
     <div style={styles.body}>
+      <FloatingBlockchainBlocks />
       <style>
         {`
+          @keyframes floatBlock {
+            0%, 100% { 
+              transform: translate(-50%, -50%) translateY(0px);
+            }
+            50% { 
+              transform: translate(-50%, -50%) translateY(-30px);
+            }
+          }
+          
+          @keyframes rotateBlock {
+            from { 
+              transform: translate(-50%, -50%) rotate(0deg);
+            }
+            to { 
+              transform: translate(-50%, -50%) rotate(360deg);
+            }
+          }
+          
           @keyframes moveArrow {
             from { transform: translateX(-5px); }
             to { transform: translateX(5px); }
@@ -718,6 +801,63 @@ const Portfolio = () => {
               margin-top: 2rem !important;
             }
             .greeting-container {
+              margin-top: 1.5rem !important;
+            }
+            .greeting-container h2 {
+              font-size: 1.8rem !important;
+            }
+            .about-right {
+              order: 2;
+            }
+            .hire-me-section {
+              padding: 3rem 2.5rem !important;
+            }
+            .hire-me-heading {
+              font-size: 2.6rem !important;
+            }
+            .aims-section {
+              padding: 3.5rem 2.5rem !important;
+            }
+            .timeline-number {
+              font-size: 2.5rem !important;
+            }
+          }
+          
+          @media (max-width: 768px) {
+            .hero { 
+              flex-direction: column !important; 
+              text-align: center !important; 
+              padding: 8rem 2rem 4rem !important; 
+            }
+            .text-section { 
+              max-width: 100% !important; 
+              margin-bottom: 2rem !important; 
+            }
+            .hero-image { max-width: 80% !important; }
+            .hero h1 { font-size: 2.5rem !important; }
+            .hero p { font-size: 0.9rem !important; }
+            .navbar { padding: 1rem !important; }
+            .logo { font-size: 1.4rem !important; }
+            .nav-links { display: none !important; }
+            .mobile-menu-button { display: block !important; }
+            .social-sidebar { display: none !important; }
+            .section { padding: 3rem 2rem !important; }
+            .services-grid { grid-template-columns: 1fr !important; }
+            .projects-grid { grid-template-columns: 1fr !important; }
+            .testimonial-grid { grid-template-columns: 1fr !important; }
+            
+            .about-section { 
+              padding: 6rem 2rem 4rem 2rem !important; 
+              gap: 2rem !important;
+            }
+            .about-left {
+              margin-bottom: 1.5rem;
+              margin-top: 3rem !important;
+            }
+            .greeting-container {
+              margin-top: 1.2rem !important;
+            }
+                          .greeting-container {
               margin-top: 1.5rem !important;
             }
             .greeting-container h2 {
@@ -1119,9 +1259,9 @@ const Portfolio = () => {
         </nav>
 
         {/* Mobile Menu */}
-        <div className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
-          <ul style={{ listStyle: 'none', padding: '2rem', margin: 0 }}>
-            <li style={{ marginBottom: '1rem' }}>
+        <div className={`mobile-menu ${mobileMenuOpen ? "open" : ""}`}>
+          <ul style={{ listStyle: "none", padding: "2rem", margin: 0 }}>
+            <li style={{ marginBottom: "1rem" }}>
               <a
                 href="/resume.pdf"
                 download="Aaditya_Mishra_Resume.pdf"
@@ -1131,18 +1271,39 @@ const Portfolio = () => {
                 Resume
               </a>
             </li>
-            <li style={{ marginBottom: '1rem' }}>
-              <a href="#services" style={styles.navLink} onClick={(e) => { e.preventDefault(); handleNavClick('services'); }}>
+            <li style={{ marginBottom: "1rem" }}>
+              <a
+                href="#services"
+                style={styles.navLink}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick("services");
+                }}
+              >
                 Services
               </a>
             </li>
-            <li style={{ marginBottom: '1rem' }}>
-              <a href="#projects" style={styles.navLink} onClick={(e) => { e.preventDefault(); handleNavClick('projects'); }}>
+            <li style={{ marginBottom: "1rem" }}>
+              <a
+                href="#projects"
+                style={styles.navLink}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick("projects");
+                }}
+              >
                 Projects
               </a>
             </li>
             <li>
-              <a href="#about" style={styles.navLink} onClick={(e) => { e.preventDefault(); handleNavClick('about'); }}>
+              <a
+                href="#about"
+                style={styles.navLink}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick("about");
+                }}
+              >
                 About
               </a>
             </li>
@@ -1150,7 +1311,11 @@ const Portfolio = () => {
         </div>
 
         {/* Conditional Rendering Based on Current Page */}
-        {currentPage === 'home' ? <Home styles={styles} /> : <AboutPage styles={styles} />}
+        {currentPage === "home" ? (
+          <Home styles={styles} />
+        ) : (
+          <AboutPage styles={styles} />
+        )}
       </div>
     </div>
   );
@@ -1178,7 +1343,8 @@ const animatedStyles = {
     left: 0,
     width: "100%",
     height: "100%",
-    background: "linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(255, 26, 26, 0.1) 50%, rgba(0, 0, 0, 0.9) 100%)",
+    background:
+      "linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(255, 26, 26, 0.1) 50%, rgba(0, 0, 0, 0.9) 100%)",
     backdropFilter: "blur(2px)",
     transition: "clip-path 3s ease-in-out",
     animation: "scratchReveal 3s ease-in-out forwards",
@@ -1207,7 +1373,7 @@ const aboutStyles = {
     justifyContent: "center",
     alignItems: "flex-start",
     position: "relative",
-    marginTop:"6rem",
+    marginTop: "6rem",
   },
   aboutRight: {
     flex: 1,
@@ -1276,7 +1442,7 @@ const aboutStyles = {
     transition: "all 0.3s ease",
   },
   skillSection: {
-    marginTop:"2rem",
+    marginTop: "2rem",
     display: "flex",
     flexDirection: "column",
     gap: "1.5rem",
@@ -1322,19 +1488,22 @@ const aboutStyles = {
     width: "100%",
     marginTop: "4rem",
     padding: "4rem",
-    background: "linear-gradient(135deg, rgba(255, 26, 26, 0.08) 0%, rgba(0, 0, 0, 0.95) 100%)",
+    background:
+      "linear-gradient(135deg, rgba(255, 26, 26, 0.08) 0%, rgba(0, 0, 0, 0.95) 100%)",
     borderRadius: "20px",
     boxSizing: "border-box",
     textAlign: "center",
     border: "2px solid rgba(255, 26, 26, 0.2)",
     position: "relative",
     overflow: "hidden",
-    boxShadow: "0 20px 40px rgba(255, 26, 26, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+    boxShadow:
+      "0 20px 40px rgba(255, 26, 26, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
   },
   hireMeHeading: {
     fontSize: "3rem",
     fontWeight: 800,
-    background: "linear-gradient(135deg, #ff1a1a 0%, #ff6d6d 50%, #ffffff 100%)",
+    background:
+      "linear-gradient(135deg, #ff1a1a 0%, #ff6d6d 50%, #ffffff 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
     backgroundClip: "text",
@@ -1359,7 +1528,8 @@ const aboutStyles = {
     width: "100%",
     marginTop: "4rem",
     padding: "5rem 4rem",
-    background: "linear-gradient(135deg, rgba(31, 31, 31, 0.3) 0%, rgba(0, 0, 0, 0.6) 100%)",
+    background:
+      "linear-gradient(135deg, rgba(31, 31, 31, 0.3) 0%, rgba(0, 0, 0, 0.6) 100%)",
     boxSizing: "border-box",
   },
   aimsHeading: {
@@ -1418,7 +1588,8 @@ const aboutStyles = {
     top: "60px",
     width: "2px",
     height: "calc(100% + 20px)",
-    background: "linear-gradient(180deg, #ff1a1a 0%, rgba(255, 26, 26, 0.2) 100%)",
+    background:
+      "linear-gradient(180deg, #ff1a1a 0%, rgba(255, 26, 26, 0.2) 100%)",
     zIndex: 1,
   },
   goalTitle: {
@@ -1626,7 +1797,8 @@ const styles = {
     gap: "24px",
   },
   serviceCard: {
-    background: "linear-gradient(135deg, rgba(31, 31, 31, 0.9) 0%, rgba(0, 0, 0, 0.9) 100%)",
+    background:
+      "linear-gradient(135deg, rgba(31, 31, 31, 0.9) 0%, rgba(0, 0, 0, 0.9) 100%)",
     padding: "32px",
     borderRadius: "16px",
     border: "1px solid rgba(220, 38, 38, 0.2)",
