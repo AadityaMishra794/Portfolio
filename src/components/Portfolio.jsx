@@ -29,9 +29,10 @@ const FloatingBlockchainBlocks = () => {
           y: Math.random() * 100,
           size: Math.random() * 30 + 20,
           duration: Math.random() * 1 + 3,
+          zIndex: Math.floor(Math.random() * 3),
           delay: Math.random() * 5,
           rotation: Math.random() * 360,
-          opacity: Math.random() * 0.3 + 0.1,
+          opacity: Math.random() * 0.1 + 0.1,
           shape: ["box", "hexagon", "square"][Math.floor(Math.random() * 3)],
         });
       }
