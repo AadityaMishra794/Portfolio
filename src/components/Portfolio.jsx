@@ -22,7 +22,7 @@ const FloatingBlockchainBlocks = () => {
   useEffect(() => {
     const generateBlocks = () => {
       const newBlocks = [];
-      for (let i = 0; i < 15; i++) {
+      for (let i = 0; i < 7; i++) {
         newBlocks.push({
           id: i,
           x: Math.random() * 100,
